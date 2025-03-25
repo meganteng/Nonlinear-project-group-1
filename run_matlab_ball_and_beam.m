@@ -1,5 +1,7 @@
+% Observer states plotting available. Please read the comments. - Megan
 close all
 clear all
+
 
 %% General Settings.
 % Initial state.
@@ -24,7 +26,8 @@ u_saturation = 10;
 
 % Initialize traces.
 xs = x0;
-xhat = x0;
+% Uncomment the following line if you wish to plot out the observer states.
+% xhat = x0;
 ts = t0;
 us = [];
 theta_ds = [];
@@ -43,7 +46,9 @@ while ~end_simulation
     %% Determine control input.
     tstart = tic; % DEBUG    
     [u, theta_d] = controller_handle.stepController(t, x(1), x(3));
-    xhat_current = controller_handle.getObserverStates();
+    % Uncomment the following line if you wish to plot out the observer
+    % states.
+    % xhat_current = controller_handle.getObserverStates();
     u = min(u, u_saturation);
     u = max(u, -u_saturation);
     if verbose
@@ -64,7 +69,8 @@ while ~end_simulation
     x = xs_t(end, :)';
     %% Record traces.
     xs = [xs, x];
-    xhat = [xhat, xhat_current];
+    % Uncomment the following line if you wish to plot out the observer states.
+    % xhat = [xhat, xhat_current];
     ts = [ts, t];
     [p_ball_ref, v_ball_ref] = get_ref_traj(t);
     ref_ps = [ref_ps, p_ball_ref];
@@ -89,7 +95,9 @@ score = get_controller_score(ts, ps, thetas, ref_ps, us);
 % Plot states.
 plot_states(ts, xs, ref_ps, ref_vs, theta_ds);
 
-plot_observer_states(ts, xs, xhat, ref_ps, ref_vs, theta_ds);
+% Uncomment the following line if you wish to plot out the observer states.
+% plot_observer_states(ts, xs, xhat, ref_ps, ref_vs, theta_ds);
+
 % Plot output errors.
 plot_tracking_errors(ts, ps, ref_ps);        
 % Plot control input history.
