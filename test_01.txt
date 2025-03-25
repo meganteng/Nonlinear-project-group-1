@@ -1,2 +1,4 @@
 this is a test file
  cd C:/Users/megan/Spring2025/Nonlinear/Project/Phase_1/EE222-Nonlinear-Systems-Ball-and-Beam-Project-main
+change again
+
