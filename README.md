@@ -37,3 +37,10 @@ To test your controller:
 Run `run_matlab_ball_and_beam.m` for a MATLAB-based simulation.
 
 Run `run_simulink_ball_and_beam.m` for a Simulink-based simulation.
+
+
+-----------------------------------------------------------------------------
+## Controller versions
+[`PID`](studentControllerInterface_PID.m)
+[`LQR + Feedback Linearization`](studentControllerInterface_LQR_full_feedback.m)
+[`LQR + Feedback Linearization + Luenberger observer`](studentControllerInterface.m)
