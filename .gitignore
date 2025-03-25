@@ -1,7 +1,7 @@
 # ignore all .pdf file
-*.pdf
 studentControllerInterface_LQR_observer.m
 studentControllerInterface_LQR_velocityPrediction.m
 studentControllerInterface_OG.m
 studentControllerInterface_OG2.m
+*.pdf
 test_01.txt
