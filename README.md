@@ -44,5 +44,8 @@ Run `run_simulink_ball_and_beam.m` for a Simulink-based simulation.
 Please change the controller file name you intend to use to `studentControllerInterface.m` and avoid naming conflicts.
 
 [`PID`](studentControllerInterface_PID.m) - PID 
+
 [`LQR + Feedback Linearization`](studentControllerInterface_LQR_full_feedback.m) - LQR + Feedback Liniearization
+
 [`LQR + Feedback Linearization + Luenberger observer`](studentControllerInterface.m) - LQR + Feedback Liniearization + Luenberger Observer (faulty)
+
