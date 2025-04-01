@@ -5,7 +5,6 @@ classdef studentControllerInterface < matlab.System
     properties (Access = public)
         custom_Q = [];         % Custom Q matrix (4x4). If empty, use default diag([100, 0.3, 0, 0])
         custom_R = [];         % Custom R value. If empty, use default 0.2
-        custom_k_servo = [];   % Custom servo gain. If empty, use default 10.
         custom_nl_scale = [];  % Custom scaling for nonlinear cancellation (default = 1)
     end
 
@@ -108,12 +107,8 @@ classdef studentControllerInterface < matlab.System
                 (v + (5/7) * ((L/2) - p_ball) * (rg/L)^2 * v_theta^2 * cos(theta)^2), -1), 1) );
             theta_d = max(min(theta_d, theta_saturation), -theta_saturation);
 
-            % Use custom servo gain if provided
-            if isempty(obj.custom_k_servo)
-                k_servo = 10;
-            else
-                k_servo = obj.custom_k_servo;
-            end
+            % Set servo gain to fixed value of 10
+            k_servo = 10;
 
             % Compute servo voltage command
             V_servo = k_servo * (theta_d - theta);
