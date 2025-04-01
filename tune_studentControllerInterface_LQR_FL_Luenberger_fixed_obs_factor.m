@@ -65,11 +65,10 @@ classdef tune_studentControllerInterface_LQR_FL_Luenberger_fixed_obs_factor < ma
 
             % Design Luenberger observer gain matrix L
             % Place observer poles 3-5 times faster than controller poles
-            if isempty(obj.custom_obs_factor)
-                observer_poles = 4 * eig(A - B * obj.K); % Example: 3x faster
-            else
-                observer_poles = obj.custom_obs_factor * eig(A - B * obj.K);
-            end
+        
+        
+            obs_factor = 4;
+            observer_poles = obs_factor * eig(A - B * obj.K); % Example: 3x faster
             obj.L = place(A', C', observer_poles)'; % Transpose for correct dimensions
 
             % Initialize estimated state
