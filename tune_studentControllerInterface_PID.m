@@ -56,9 +56,8 @@ classdef tune_studentControllerInterface_PID < matlab.System
             theta_saturation = 45 * pi / 180;
             theta_d = max(min(theta_d, theta_saturation), -theta_saturation);
             
-            k_servo = 10;  % Default servo gain for PID
-            
             % Compute servo voltage.
+            k_servo = 10;
             V_servo = k_servo * (theta_d - theta);
             
             % Update stored values.
