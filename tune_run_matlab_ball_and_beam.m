@@ -1,7 +1,7 @@
 % FILE: tune_run_matlab_ball_and_beam.m
 
-function score = run_matlab_ball_and_beam(controller)
-% run_matlab_ball_and_beam - Run the ball-and-beam simulation with a given controller.
+function score = tune_run_matlab_ball_and_beam(controller)
+% tune_run_matlab_ball_and_beam - Run the ball-and-beam simulation with a given controller.
 %
 % Input:
 %   controller - instance of studentControllerInterface with custom parameters set
