@@ -1,4 +1,4 @@
-% FILE: tune_fminsearch.m
+% FILE: tune_fminsearch_LQR_FL_Luenberger_extra_params.m
 
 p0 = [300, 0.3, 0, 0, 0.4, 2, 1];
 

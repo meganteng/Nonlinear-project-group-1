@@ -1,4 +1,4 @@
-% FILE: tune_objective.m
+% FILE: tune_objective_LQR_FL_Luenberger_extra_params.m
 function score = tune_objective(p)
     % Use default parameters if none provided.
     if nargin < 1
