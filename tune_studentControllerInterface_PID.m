@@ -6,7 +6,6 @@ classdef studentControllerInterface < matlab.System
         custom_Kp = [];       % Custom proportional gain (if empty, default is 3)
         custom_Ki = [];       % Custom integral gain (if empty, default is 1)
         custom_Kd = [];       % Custom derivative gain (if empty, default is 5)
-        custom_k_servo = [];  % Custom servo gain (if empty, default is 5)
     end
 
     %% Private properties for internal use
@@ -57,12 +56,7 @@ classdef studentControllerInterface < matlab.System
             theta_saturation = 45 * pi / 180;
             theta_d = max(min(theta_d, theta_saturation), -theta_saturation);
             
-            % Use custom servo gain if provided.
-            if ~isempty(obj.custom_k_servo)
-                k_servo = obj.custom_k_servo;
-            else
-                k_servo = 5;  % Default servo gain for PID
-            end
+            k_servo = 10;  % Default servo gain for PID
             
             % Compute servo voltage.
             V_servo = k_servo * (theta_d - theta);

@@ -1,16 +1,16 @@
 % FILE: tune_objective_PID.m
 
 function score = tune_objective(p)
-    % Parameter vector: [Kp, Ki, Kd, k_servo]
+    % Parameter vector: [Kp, Ki, Kd]
     if nargin < 1
-        p = [3, 1, 5, 5];
+        p = [3, 1, 5];
     end
 
     % Unpack parameters.
     Kp = p(1);
     Ki = p(2);
     Kd = p(3);
-    k_servo = p(4);
+    k_servo = 10;  % Fixed k_servo value
 
     % Create a controller instance.
     controller = studentControllerInterface();
