@@ -1,5 +1,5 @@
 % FILE: tune_objective_LQR_FL_Luenberger_extra_params.m
-function score = tune_objective(p)
+function score = tune_objective_LQR_FL_Luenberger_extra_params(p)
     % Use default parameters if none provided.
     if nargin < 1
         % Default vector: [Q1, Q2, Q3, Q4, R, obs_factor, nl_scale]
@@ -16,7 +16,7 @@ function score = tune_objective(p)
     nl_scale   = p(7);
 
     % Create the controller instance.
-    controller = studentControllerInterface();
+    controller = tune_studentControllerInterface_LQR_FL_Luenberger_extra_params();
 
     % Set custom properties.
     controller.custom_Q = diag([Q1, Q2, Q3, Q4]);
@@ -25,7 +25,7 @@ function score = tune_objective(p)
     controller.custom_nl_scale = nl_scale;
 
     % Run the simulation.
-    score = run_matlab_ball_and_beam(controller);
+    score = tune_run_matlab_ball_and_beam(controller);
     fprintf('Parameters: Q=[%.2f, %.2f, %.2f, %.2f], R=%.2f, obs_factor=%.2f, nl_scale=%.2f, Score=%.4f\n',...
             Q1, Q2, Q3, Q4, R, obs_factor, nl_scale, score);
 end

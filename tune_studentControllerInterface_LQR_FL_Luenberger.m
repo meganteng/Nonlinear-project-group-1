@@ -1,7 +1,13 @@
 % FILE: tune_studentControllerInterface_LQR_FL_Luenberger.m
 
 % _LQR_FL_Luenberger
-classdef studentControllerInterface < matlab.System
+classdef tune_studentControllerInterface_LQR_FL_Luenberger < matlab.System
+    properties
+        custom_Q;             % Custom LQR Q matrix (if provided)
+        custom_R;             % Custom LQR R (if provided)
+        custom_obs_factor;    % Factor to scale observer poles
+    end
+    
     properties (Access = private)
         %% Controller Properties
         K;  % LQR Gain Matrix
@@ -42,16 +48,28 @@ classdef studentControllerInterface < matlab.System
                  0 0 1 0];
 
             % Define LQR weight matrices
-            Q = diag([100, 0.3, 0, 0]); % Adjusted Q for smoother control
-            R = 0.2;  % Increased control effort penalty
+            if isempty(obj.custom_Q)
+                Q = diag([100, 0.3, 0, 0]); % Adjusted Q for smoother control
+            else
+                Q = obj.custom_Q;
+            end
+            
+            if isempty(obj.custom_R)
+                R = 0.2;  % Increased control effort penalty
+            else
+                R = obj.custom_R;
+            end
 
             % Compute LQR gain
             obj.K = lqr(A, B, Q, R);
 
             % Design Luenberger observer gain matrix L
             % Place observer poles 3-5 times faster than controller poles
-            % observer_poles = 4 * eig(A - B * obj.K); % Example: 3x faster
-            observer_poles = 4 * eig(A - B * obj.K);
+            if isempty(obj.custom_obs_factor)
+                observer_poles = 4 * eig(A - B * obj.K); % Example: 3x faster
+            else
+                observer_poles = obj.custom_obs_factor * eig(A - B * obj.K);
+            end
             obj.L = place(A', C', observer_poles)'; % Transpose for correct dimensions
 
             % Initialize estimated state

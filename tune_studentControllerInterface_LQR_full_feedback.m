@@ -1,6 +1,6 @@
 % FILE: tune_studentControllerInterface_LQR_full_feedback.m 
 
-classdef studentControllerInterface < matlab.System
+classdef tune_studentControllerInterface_LQR_full_feedback < matlab.System
     %% New public properties for tuning
     properties (Access = public)
         custom_Q = [];         % Custom Q matrix (4x4). If empty, use default diag([100, 0.3, 0, 0])

@@ -1,6 +1,6 @@
 % FILE: tune_studentControllerInterface_LQR_EKF.m 
 
-classdef studentControllerInterface < matlab.System
+classdef tune_studentControllerInterface_LQR_EKF < matlab.System
     % Controller using LQR with EKF observer for state estimation
 
     properties

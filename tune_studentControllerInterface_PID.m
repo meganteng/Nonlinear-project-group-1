@@ -1,6 +1,6 @@
 % FILE: tune_studentControllerInterface_PID.m 
 
-classdef studentControllerInterface < matlab.System
+classdef tune_studentControllerInterface_PID < matlab.System
     %% Public properties for autotuning
     properties (Access = public)
         custom_Kp = [];       % Custom proportional gain (if empty, default is 3)

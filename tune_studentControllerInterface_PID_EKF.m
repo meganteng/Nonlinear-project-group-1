@@ -1,7 +1,7 @@
 % FILE: tune_studentControllerInterface_PID_EKF.m
 
 
-classdef studentControllerInterface < matlab.System
+classdef tune_studentControllerInterface_PID_EKF < matlab.System
     %% Public properties for autotuning
     properties (Access = public)
         custom_Kp = [];         % Custom proportional gain (if empty, default is 3)

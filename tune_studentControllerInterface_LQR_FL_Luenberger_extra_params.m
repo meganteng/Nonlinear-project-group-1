@@ -1,6 +1,6 @@
-% FILE: studentControllerInterface_LQR_FL_Luenberger_extra_params.m 
+% FILE: tune_studentControllerInterface_LQR_FL_Luenberger_extra_params.m 
 
-classdef studentControllerInterface < matlab.System
+classdef tune_studentControllerInterface_LQR_FL_Luenberger_extra_params < matlab.System
 
     %% New public properties for tuning
     properties (Access = public)

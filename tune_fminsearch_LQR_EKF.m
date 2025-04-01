@@ -1,18 +1,17 @@
 % FILE: tune_fminsearch_LQR_EKF.m
 
-% Define an initial guess for [Kp, Ki, Kd, obs_factor]
+% Define an initial guess for [Q11, Q22, R, obs_factor]
 p0 = [300, 0.3, 0.4, 2];
 
 % Set optimization options (display iterations, tolerance, etc.)
 options = optimset('Display','iter','TolX',1e-2,'TolFun',1e-2);
 
 % Optimize the objective function (minimizing score)
-[opt_params, best_score] = fminsearch(@tune_objective, p0, options);
+[opt_params, best_score] = fminsearch(@tune_objective_LQR_EKF, p0, options);
 
 fprintf('Optimal Parameters: Q11=%.2f, Q22=%.2f, R=%.2f, obs_factor=%.2f\n',...
     opt_params(1), opt_params(2), opt_params(3), opt_params(4));
 fprintf('Best Score: %.4f\n', best_score);
-
 
 // Parameters: Q11=863.17, Q22=0.07, R=0.16, obs_factor=1.68, Score=2.4840
 //     40           74          2.48404         expand
