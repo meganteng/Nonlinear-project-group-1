@@ -1,4 +1,4 @@
-% FILE: tune_fminsearch_LQR_FL_Luenberger_fixed_obs_factor.m
+% FILE: tune_fminsearch_LFL_Luen_fixObs.m
 
 % Define an initial guess (not strictly needed by ga, but good practice)
 p0 = [300, 0.3, 0.4];
@@ -21,7 +21,7 @@ options = optimoptions('ga', ...
 % [opt_params, best_score] = patternsearch(@tune_objective_LQR_FL_Luenberger, p0, [], [], [], [], lb, ub, [], options);
 
 % Optimize using ga (genetic algorithm)
-[opt_params, best_score] = ga(@tune_objective_LQR_FL_Luenberger, nvars, [], [], [], [], lb, ub, [], options);
+[opt_params, best_score] = ga(@tune_objective_LFL_Luen_fixObs, nvars, [], [], [], [], lb, ub, [], options);
 
 
 fprintf('Optimal Parameters: Q11=%.8f, Q22=%.8f, R=%.8f\n',...

@@ -1,7 +1,7 @@
-% FILE: tune_studentControllerInterface_LQR_FL_Luenberger_fixed_obs_factor.m
+% FILE: tune_studentControllerInterface_LFL_Luen_fixObs.m
 
 % _LQR_FL_Luenberger
-classdef tune_studentControllerInterface_LQR_FL_Luenberger_fixed_obs_factor < matlab.System
+classdef tune_studentControllerInterface_LFL_Luen_fixObs < matlab.System
     properties
         custom_Q;             % Custom LQR Q matrix (if provided)
         custom_R;             % Custom LQR R (if provided)

@@ -1,6 +1,6 @@
-% FILE: tune_objective_LQR_FL_Luenberger_fixed_obs_factor.m
+% FILE: tune_objective_LFL_Luen_fixObs.m
 
-function score = tune_objective_LQR_FL_Luenberger_fixed_obs_factor(p)
+function score = tune_objective_LFL_Luen_fixObs(p)
     % If no input argument is provided, use default parameter values.
     if nargin < 1
         % Default parameter vector: [Q11, Q22, R]
@@ -13,11 +13,11 @@ function score = tune_objective_LQR_FL_Luenberger_fixed_obs_factor(p)
     R   = p(3);
     
     % Create the controller instance
-    controller = tune_studentControllerInterface_LQR_FL_Luenberger_fixed_obs_factor();
+    controller = tune_studentControllerInterface_LFL_Luen_fixObs();
     
     % Set custom properties to override defaults
-    controller.custom_Q = diag([Q11, Q22, 0, 0]);  % update Q
-    controller.custom_R = R;                        % update R
+    controller.custom_Q = diag([Q11, Q22, 0, 0]);  
+    controller.custom_R = R;                        
     % k_servo is no longer a tuning parameter, it's fixed at 10 in the controller
     
     % Run the simulation using your runner function.
