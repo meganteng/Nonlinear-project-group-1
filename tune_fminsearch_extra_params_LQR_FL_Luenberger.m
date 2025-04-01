@@ -13,12 +13,12 @@ fprintf('Optimal Parameters: Q=[%.2f, %.2f, %.2f, %.2f], R=%.2f, obs_factor=%.2f
 fprintf('Best Score: %.4f\n', best_score);
 
 
-// Parameters: Q=[305.45, 0.30, 0.00, 0.00], R=0.39, obs_factor=2.09, k_servo=7.97, nl_scale=0.99, Score=3.9653
-//    106          206          3.96528         expand
-// Average Tracking Error: 0.0019 
-// Average Energy Consumption: 0.1050 
+// Parameters: Q=[440.12, 0.14, 0.00, 0.00], R=0.23, obs_factor=1.94, k_servo=7.69, nl_scale=0.68, Score=3.1790
+//    271          451          3.12662         contract inside
+// Average Tracking Error: 0.0015 
+// Average Energy Consumption: 0.1098 
 // Safety Contraint Violation: 0 
-// Tracking Cost: 3.45 
-// Energy Cost: 0.53 
+// Tracking Cost: 2.67 
+// Energy Cost: 0.55 
 // Safety Cost: 0.00 
-// Total Score: 3.97 
+// Total Score: 3.22 
