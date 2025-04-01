@@ -7,7 +7,6 @@ classdef studentControllerInterface < matlab.System
         custom_Q = [];         % Custom Q matrix, now can be 4x4 (if empty, use default)
         custom_R = [];         % Custom R value (if empty, use default)
         custom_obs_factor = []; % Custom observer factor (if empty, use default 2)
-        custom_k_servo = [];   % Custom servo gain (if empty, use default)
         custom_nl_scale = [];  % Custom scaling for nonlinear cancellation (default = 1)
     end
 
@@ -146,11 +145,8 @@ classdef studentControllerInterface < matlab.System
                 (v + (5/7) * ((L_beam/2) - p_ball_hat) * (rg/L_beam)^2 * measured_dtheta^2 * cos(theta)^2), -1), 1) );
             theta_d = max(min(theta_d, theta_saturation), -theta_saturation);
             
-            if isempty(obj.custom_k_servo)
-                k_servo = 10;
-            else
-                k_servo = obj.custom_k_servo;
-            end
+            % Fixed servo gain constant
+            k_servo = 10;
 
             V_servo = k_servo * (theta_d - theta);
 

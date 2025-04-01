@@ -2,8 +2,8 @@
 function score = tune_objective(p)
     % Use default parameters if none provided.
     if nargin < 1
-        % Default vector: [Q1, Q2, Q3, Q4, R, obs_factor, k_servo, nl_scale]
-        p = [100, 0.3, 0, 0, 0.2, 2, 10, 1];
+        % Default vector: [Q1, Q2, Q3, Q4, R, obs_factor, nl_scale]
+        p = [100, 0.3, 0, 0, 0.2, 2, 1];
     end
 
     % Unpack parameters.
@@ -13,8 +13,7 @@ function score = tune_objective(p)
     Q4 = p(4);
     R   = p(5);
     obs_factor = p(6);
-    k_servo    = p(7);
-    nl_scale   = p(8);
+    nl_scale   = p(7);
 
     % Create the controller instance.
     controller = studentControllerInterface();
@@ -23,11 +22,10 @@ function score = tune_objective(p)
     controller.custom_Q = diag([Q1, Q2, Q3, Q4]);
     controller.custom_R = R;
     controller.custom_obs_factor = obs_factor;
-    controller.custom_k_servo = k_servo;
     controller.custom_nl_scale = nl_scale;
 
     % Run the simulation.
     score = run_matlab_ball_and_beam(controller);
-    fprintf('Parameters: Q=[%.2f, %.2f, %.2f, %.2f], R=%.2f, obs_factor=%.2f, k_servo=%.2f, nl_scale=%.2f, Score=%.4f\n',...
-            Q1, Q2, Q3, Q4, R, obs_factor, k_servo, nl_scale, score);
+    fprintf('Parameters: Q=[%.2f, %.2f, %.2f, %.2f], R=%.2f, obs_factor=%.2f, nl_scale=%.2f, Score=%.4f\n',...
+            Q1, Q2, Q3, Q4, R, obs_factor, nl_scale, score);
 end
