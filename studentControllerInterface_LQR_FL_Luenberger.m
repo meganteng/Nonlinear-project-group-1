@@ -39,11 +39,9 @@ classdef studentControllerInterface < matlab.System
             C = [1 0 0 0; 
                  0 0 1 0];
 
-            Q = diag([50.135040, 0.499840, 0, 0]); % Fill in your optimal Q matrix here
-            R = 0.099808;    % Fill in your optimal R value here
-            observer_factor = 2.099518; % Fill in your optimal observer factor here
-            
-
+            Q = diag([298, 6.87, 0, 0]); % Fill in your optimal Q matrix here
+            R = 0.406;    % Fill in your optimal R value here
+            observer_factor = 4; % Fill in your optimal observer factor here
 
             % Compute LQR gain
             obj.K = lqr(A, B, Q, R);
