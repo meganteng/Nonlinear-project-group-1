@@ -11,3 +11,14 @@ options = optimset('Display','iter','TolX',1e-2,'TolFun',1e-2);
 fprintf('Optimal Parameters: Q=[%.2f, %.2f, %.2f, %.2f], R=%.2f, obs_factor=%.2f, k_servo=%.2f, nl_scale=%.2f\n',...
     opt_params(1), opt_params(2), opt_params(3), opt_params(4), opt_params(5), opt_params(6), opt_params(7), opt_params(8));
 fprintf('Best Score: %.4f\n', best_score);
+
+
+// Parameters: Q=[305.45, 0.30, 0.00, 0.00], R=0.39, obs_factor=2.09, k_servo=7.97, nl_scale=0.99, Score=3.9653
+//    106          206          3.96528         expand
+// Average Tracking Error: 0.0019 
+// Average Energy Consumption: 0.1050 
+// Safety Contraint Violation: 0 
+// Tracking Cost: 3.45 
+// Energy Cost: 0.53 
+// Safety Cost: 0.00 
+// Total Score: 3.97 
