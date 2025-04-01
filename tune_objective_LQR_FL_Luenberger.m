@@ -26,6 +26,6 @@ function score = tune_objective_LQR_FL_Luenberger(p)
     score = tune_run_matlab_ball_and_beam(controller);
     
     % Optionally display the parameters and resulting score for debugging.
-    fprintf('Parameters: Q11=%.2f, Q22=%.2f, R=%.2f, obs_factor=%.2f, Score=%.4f\n',...
+    fprintf('Parameters: Q11=%.8f, Q22=%.8f, R=%.8f, obs_factor=%.8f, Score=%.8f\n',...
             Q11, Q22, R, obs_factor, score);
 end

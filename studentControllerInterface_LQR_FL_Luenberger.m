@@ -39,9 +39,11 @@ classdef studentControllerInterface < matlab.System
             C = [1 0 0 0; 
                  0 0 1 0];
 
-            % Define LQR weight matrices
-            Q = diag([100, 0.3, 0, 0]); % Adjusted Q for smoother control
-            R = 0.2;  % Increased control effort penalty
+            Q = diag([50.135040, 0.499840, 0, 0]); % Fill in your optimal Q matrix here
+            R = 0.099808;    % Fill in your optimal R value here
+            observer_factor = 2.099518; % Fill in your optimal observer factor here
+            
+
 
             % Compute LQR gain
             obj.K = lqr(A, B, Q, R);
@@ -49,7 +51,7 @@ classdef studentControllerInterface < matlab.System
             % Design Luenberger observer gain matrix L
             % Place observer poles 3-5 times faster than controller poles
             % observer_poles = 4 * eig(A - B * obj.K); % Example: 3x faster
-            observer_poles = 4 * eig(A - B * obj.K);
+            observer_poles = observer_factor * eig(A - B * obj.K);
             obj.L = place(A', C', observer_poles)'; % Transpose for correct dimensions
 
             % Initialize estimated state
