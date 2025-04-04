@@ -1,5 +1,5 @@
 % _LQR_full_feedback
-classdef studentControllerInterface < matlab.System
+classdef studentControllerInterface_LQR_full_feedback < matlab.System
     properties (Access = private)
         %% Controller Properties
         K;  % LQR Gain Matrix

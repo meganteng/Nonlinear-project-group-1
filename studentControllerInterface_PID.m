@@ -1,5 +1,5 @@
 % PID
-classdef studentControllerInterface < matlab.System
+classdef studentControllerInterface_PID < matlab.System
     properties (Access = private)
         %% Controller Parameters
         Kp = 3;  % Proportional gain

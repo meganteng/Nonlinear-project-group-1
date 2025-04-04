@@ -2,6 +2,13 @@
 close all
 clear all
 
+%% Change controller names here to use the specific student controller.
+% LQR_FL_Luenberger: Continuous time LQR + Feedback Linearization + Luenburger Observer.
+% LQR_FL_Luenberger_DT: Discrete time LQR + Feedback Linearization + Luenburger Observer.
+% LQR_full_feedback: Continuous time LQR + Feedback Linearization + Discrete time linearization.
+% LQR_Local: Continuous time LQR + Local linearization. This controller will lead to ewarly termination.
+% PID: Continuous time PID.
+controller_name = "LQR_FL_Luenberger";
 
 %% General Settings.
 % Initial state.
@@ -19,8 +26,18 @@ verbose = false;
 plot_animation = true;
 % save animation to video if true.
 save_video = false;
-
-controller_handle = studentControllerInterface();
+    
+if controller_name == "LQR_FL_Luenberger_DT"
+    controller_handle = studentControllerInterface_LQR_FL_Luenberger_DT();
+elseif controller_name == "LQR_full_feedback"
+    controller_handle = studentControllerInterface_LQR_full_feedback();
+elseif controller_name == "PID"
+    controller_handle = studentControllerInterface_PID();
+elseif controller_name == "LQR_Local"
+    controller_handle = studentControllerInterface_LQR_Local();
+else
+    controller_handle = studentControllerInterface_LQR_FL_Luenberger();
+end
 setup(controller_handle);
 u_saturation = 10;
 
