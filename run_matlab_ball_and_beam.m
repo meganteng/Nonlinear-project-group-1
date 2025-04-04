@@ -1,6 +1,6 @@
 % Observer states plotting available. Please read the comments. - Megan
 close all
-clear all
+clear
 
 %% Change controller names here to use the specific student controller.
 % LQR_FL_Luenberger: Continuous time LQR + Feedback Linearization + Luenburger Observer.
