@@ -1,9 +1,11 @@
 % _LQR_full_feedback
 classdef studentControllerInterface_LQR_full_feedback < matlab.System
+
     properties (Access = private)
+
         %% Controller Properties
-        K;  % LQR Gain Matrix
-        
+        K = zeros(1, 4);  % LQR Gain Matrix
+
         %% Internal States
         t_prev = -1;   % Previous timestep
         theta_d = 0;   % Desired beam angle
@@ -15,6 +17,9 @@ classdef studentControllerInterface_LQR_full_feedback < matlab.System
     
     methods(Access = protected)
         function setupImpl(obj)
+
+            coder.extrinsic("lqr");
+
             % Define system parameters
             g = 9.81;   % Gravity (m/s^2)
             tau = 0.025; % Motor time constant (s)
@@ -35,7 +40,11 @@ classdef studentControllerInterface_LQR_full_feedback < matlab.System
             R = 0.2;  % Increased control effort penalty
 
             % Compute LQR gain
-            obj.K = lqr(A, B, Q, R);
+            K_mx = lqr(A, B, Q, R);
+            for i = 1:4
+                obj.K(i) = K_mx(i);
+            end
+
         end
 
         function V_servo = stepImpl(obj, t, p_ball, theta)

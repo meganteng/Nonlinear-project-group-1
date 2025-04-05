@@ -1,12 +1,14 @@
 % _LQR_FL_Luenberger
-classdef studentControllerInterface_LQR_FL_Luenberger < matlab.System
+classdef studentControllerInterface < matlab.System
+
     properties (Access = private)
+
         %% Controller Properties
-        K;  % LQR Gain Matrix
-        L;  % Luenberger Observer Gain Matrix
-        A;
-        B;
-        C;
+        K = zeros(1, 4);  % LQR Gain Matrix
+        L = zeros(4, 2);  % Luenberger Observer Gain Matrix
+        A = zeros(4, 4);
+        B = zeros(4, 1);
+        C = zeros(2, 4);
 
         %% Internal States
         t_prev = -1;   % Previous timestep
@@ -23,6 +25,9 @@ classdef studentControllerInterface_LQR_FL_Luenberger < matlab.System
 
     methods(Access = protected)
         function setupImpl(obj)
+
+            coder.extrinsic("c2d", "lqr", "place");
+
             % Define system parameters
             g = 9.81;   % Gravity (m/s^2)
             tau = 0.025; % Motor time constant (s)
@@ -40,7 +45,7 @@ classdef studentControllerInterface_LQR_FL_Luenberger < matlab.System
 
             % Output matrix (measurements: ball position and beam angle)
             C = [1 0 0 0;
-                0 0 1 0];
+                 0 0 1 0];
 
             Q = diag([298, 6.87, 0, 0]); % Fill in your optimal Q matrix here
             R = 0.406;    % Fill in your optimal R value here
@@ -57,26 +62,41 @@ classdef studentControllerInterface_LQR_FL_Luenberger < matlab.System
             dt = 0.01;  % Sampling time
 
             % Discretize A, B using zero-order hold
-            sys_c = ss(A, B, C, 0);              % Continuous-time state-space system
-            sys_d = c2d(sys_c, dt, 'zoh');       % Discretized using zero-order hold
-            Ad = sys_d.A;
-            Bd = sys_d.B;
+            % sys_c = ss(A, B, C, 0);              % Continuous-time state-space system
+            % sys_d = c2d(sys_c, dt, 'zoh');       % Discretized using zero-order hold
+            % Ad = sys_d.A;
+            % Bd = sys_d.B;
+            % [Ad, Bd] = c2d(sys_c, dt, 'zoh');
+            [Ad, Bd] = c2d(A, B, dt);
 
             % Save these
-            obj.A = Ad;
-            obj.B = Bd;
+            for i = 1:4
+                for j = 1:4
+                    obj.A(i, j) = Ad(i, j);
+                end
+            end
+            for i = 1:4
+                obj.B(i) = Bd(i);
+            end
             obj.C = C;
 
             % LQR gain can still be computed in continuous-time
-            obj.K = lqr(A, B, Q, R);
+            K_mx = lqr(A, B, Q, R);
+            for i = 1:4
+                obj.K(i) = K_mx(i);
+            end
 
             % % Observer design: place discrete poles (can multiply continuous poles' magnitudes)
             % observer_poles_d = exp(observer_factor * log(eig(A - B * obj.K)) * dt);  % Discretize poles
             % obj.L = place(Ad', C', observer_poles_d)';  % Discrete observer gain
             manual_pole_radius = 0.3;
             manual_poles = manual_pole_radius * [0.5, 0.5, 0.9, 0.9];
-            obj.L = place(Ad', C', manual_poles)';  % Note the transpose
-
+            L_mx = place(Ad', C', manual_poles)';  % Note the transpose
+            for i = 1:4
+                for j = 1:2
+                    obj.L(i, j) = L_mx(i, j);
+                end
+            end
 
             % Initialize estimated state
             obj.x_hat = zeros(4, 1); % [p_ball; v_ball; theta; dtheta]

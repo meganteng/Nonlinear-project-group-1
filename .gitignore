@@ -5,3 +5,5 @@ studentControllerInterface_OG.m
 studentControllerInterface_OG2.m
 *.pdf
 test_01.txt
+*.slxc
+slprj/

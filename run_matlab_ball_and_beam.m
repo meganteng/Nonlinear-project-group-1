@@ -36,7 +36,7 @@ elseif controller_name == "PID"
 elseif controller_name == "LQR_Local"
     controller_handle = studentControllerInterface_LQR_Local();
 else
-    controller_handle = studentControllerInterface_LQR_FL_Luenberger();
+    controller_handle = studentControllerInterface();
 end
 setup(controller_handle);
 u_saturation = 10;
