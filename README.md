@@ -1,22 +1,12 @@
 # UC Berkeley EE222/ME237 Nonlinear Systems Ball and Beam Project
 
-EE222/ME237 Nonlinear Systems, Spring 2025 Starter code and instructions for the course project.
+Group 1: Megan Teng, Boyuan Liang, Sveinung Myhre
+
+Spring 2025
 
 ## Project Overview
 
 This project involves designing and testing nonlinear controllers for a ball and beam system. The objective is to develop controllers that stabilize the ball at a desired position on the beam. You will first implement your controllers in MATLAB simulations and later test them on physical hardware.
-
-## Understanding the Problem
-
-To gain a full understanding of the problem and project expectations, please refer to the following documents in this repository:
-
-[`EE_222_Course_Project.pdf`](EE_222_Course_Project.pdf) – Overview of the project and system model. (Disregard the due dates and GitHub link in this older document)
-
-[`EE222 Lab Feedback and FAQ.pdf`](EE222_Lab_Feedback_and_FAQ.pdf) – Common issues and recommendations.
-
-[`EE222_Lab_Part_1_Simulation.pdf`](EE222_Lab_Part_1_Simulation.pdf) – Instructions for running simulation.
-
-[`EE222_Lab_Part_2_Hardware_Testing.pdf`](EE222_Lab_Part_2_Hardware_Testing.pdf) – Instructions for hardware testing. (To be updated)
 
 ## Code Instructions
 
@@ -34,18 +24,11 @@ Modify only studentControllerInterface.m to implement your controller.
 
 To test your controller:
 
-Run `run_matlab_ball_and_beam.m` for a MATLAB-based simulation.
+Run `run_matlab_ball_and_beam.m` for a MATLAB-based simulation (You can choose which control method to run).
 
-Run `run_simulink_ball_and_beam.m` for a Simulink-based simulation.
+Run `run_simulink_ball_and_beam.m` for a Simulink-based simulation (It only runs method LQR+FL+Luenberger).
 
 
 -----------------------------------------------------------------------------
 ## Controller versions
-Please change the controller file name you intend to use to `studentControllerInterface.m` and avoid naming conflicts.
-
-[`PID`](studentControllerInterface_PID.m) - PID 
-
-[`LQR + Feedback Linearization`](studentControllerInterface_LQR_full_feedback.m) - LQR + Feedback Liniearization
-
-[`LQR + Feedback Linearization + Luenberger observer`](studentControllerInterface.m) - LQR + Feedback Liniearization + Luenberger Observer (faulty)
-
+Please modify the variable `controller_name` in script `run_matlab_ball_and_beam.m` if you want to try different control methods. The default controller is LQR with feedback linearization and Luenberger observer, since it has the best performance.
