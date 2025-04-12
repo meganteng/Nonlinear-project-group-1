@@ -20,9 +20,7 @@ Clone or fork this repository.
 
 Run `setup.m` or manually add the repository and its subfolders to the MATLAB path.
 
-Modify only studentControllerInterface.m to implement your controller.
-
-To test your controller:
+To try the controllers:
 
 Run `run_matlab_ball_and_beam.m` for a MATLAB-based simulation (You can choose which control method to run).
 
