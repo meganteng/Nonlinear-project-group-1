@@ -36,38 +36,19 @@ classdef studentControllerInterface < matlab.System
             L_beam = 0.4255; % Beam length (m)
 
             % Define system matrices (A, B, C)
-            A = [0 1 0 0;
+            Ac = [0 1 0 0;
                 0 0 5*g*rg/(7*L_beam) 0;
                 0 0 0 1;
                 0 0 0 -1/tau];
-
-            B = [0; 0; 0; K_motor/tau];
-
-            % Output matrix (measurements: ball position and beam angle)
-            C = [1 0 0 0;
+            Bc = [0; 0; 0; K_motor/tau];
+            Cc = [1 0 0 0;
                  0 0 1 0];
-
             Q = diag([298, 6.87, 0, 0]); % Fill in your optimal Q matrix here
             R = 0.406;    % Fill in your optimal R value here
-            observer_factor = 4; % Fill in your optimal observer factor here
-
-            % % Compute LQR gain
-            % obj.K = lqr(A, B, Q, R);
-            %
-            % % Design Luenberger observer gain matrix L
-            % % Place observer poles 3-5 times faster than controller poles
-            % % observer_poles = 4 * eig(A - B * obj.K); % Example: 3x faster
-            % observer_poles = observer_factor * eig(A - B * obj.K);
-            % obj.L = place(A', C', observer_poles)'; % Transpose for correct dimensions
             dt = 0.01;  % Sampling time
 
             % Discretize A, B using zero-order hold
-            % sys_c = ss(A, B, C, 0);              % Continuous-time state-space system
-            % sys_d = c2d(sys_c, dt, 'zoh');       % Discretized using zero-order hold
-            % Ad = sys_d.A;
-            % Bd = sys_d.B;
-            % [Ad, Bd] = c2d(sys_c, dt, 'zoh');
-            [Ad, Bd] = c2d(A, B, dt);
+            [Ad, Bd] = c2d(Ac, Bc, dt);
 
             % Save these
             for i = 1:4
@@ -78,20 +59,18 @@ classdef studentControllerInterface < matlab.System
             for i = 1:4
                 obj.B(i) = Bd(i);
             end
-            obj.C = C;
+            obj.C = Cc;
 
             % LQR gain can still be computed in continuous-time
-            K_mx = lqr(A, B, Q, R);
+            K_mx = lqr(Ac, Bc, Q, R);
             for i = 1:4
                 obj.K(i) = K_mx(i);
             end
 
-            % % Observer design: place discrete poles (can multiply continuous poles' magnitudes)
-            % observer_poles_d = exp(observer_factor * log(eig(A - B * obj.K)) * dt);  % Discretize poles
-            % obj.L = place(Ad', C', observer_poles_d)';  % Discrete observer gain
+            % Observer design: place discrete poles (can multiply continuous poles' magnitudes)
             manual_pole_radius = 0.3;
             manual_poles = manual_pole_radius * [0.5, 0.5, 0.9, 0.9];
-            L_mx = place(Ad', C', manual_poles)';  % Note the transpose
+            L_mx = place(Ad', Cc', manual_poles)';  % Note the transpose
             for i = 1:4
                 for j = 1:2
                     obj.L(i, j) = L_mx(i, j);
@@ -113,33 +92,14 @@ classdef studentControllerInterface < matlab.System
             % Get reference trajectory
             [p_ball_ref, v_ball_ref, a_ball_ref] = get_ref_traj(t);
 
-            % Compute time step for velocity estimation
-            if obj.prev_t == -1
-                dt = 1e-3; % Avoid division by zero on first call
-            else
-                dt = max(t - obj.prev_t, 1e-3);
-            end
-
             % Luenberger observer update
             % Measured output
             y = [p_ball; theta];
-
-            % System matrices
-            A = [0 1 0 0;
-                0 0 5*g*rg/(7*L_beam) 0;
-                0 0 0 1;
-                0 0 0 -1/tau];
-
-            B = [0; 0; 0; K_motor/tau];
-
-            C = [1 0 0 0;
-                0 0 1 0];
 
             % % Observer dynamics
             % dx_hat = A * obj.x_hat + B * obj.prev_u + obj.L * (y - C * obj.x_hat);
             % obj.x_hat = obj.x_hat + dx_hat * dt;
             obj.x_hat = obj.A * obj.x_hat + obj.B * obj.prev_u + obj.L * (y - obj.C * obj.x_hat);
-
 
             % Extract estimated states
             p_ball_hat = obj.x_hat(1);
