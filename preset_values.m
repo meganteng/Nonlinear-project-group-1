@@ -17,7 +17,7 @@ Cd = [1 0 0 0;
      0 0 1 0];
 Q = diag([298, 6.87, 0, 0]); % Fill in your optimal Q matrix here
 R = 0.406;    % Fill in your optimal R value here
-dt = 0.01;  % Sampling time
+dt = 0.001;  % Sampling time
 
 % Discretize A, B using zero-order hold
 [Ad, Bd] = c2d(Ac, Bc, dt);
