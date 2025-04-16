@@ -2,6 +2,7 @@
 % Sets the necessary parameters to run the Ball and Beam experiment.
 %
 clear;
+[Ad, Bd, Cd, K_mx, L_mx] = preset_values();
 
 %% System Parameters
 % Load Ball and Beam model parameters.

@@ -1,6 +1,7 @@
 % Observer states plotting available. Please read the comments. - Megan
 close all
 clear
+[Ad, Bd, Cd, K_mx, L_mx] = preset_values();
 
 %% Change controller names here to use the specific student controller.
 % LQR_FL_Luenberger: Continuous time LQR + Feedback Linearization + Luenburger Observer.
@@ -62,7 +63,7 @@ tstart = tic;
 while ~end_simulation
     %% Determine control input.
     tstart = tic; % DEBUG    
-    [u, theta_d] = controller_handle.stepController(t, x(1), x(3));
+    [u, theta_d] = controller_handle.stepController(t, x(1), x(3), Ad, Bd, Cd, K_mx, L_mx);
     % Uncomment the following line if you wish to plot out the observer
     % states.
     % xhat_current = controller_handle.getObserverStates();
@@ -94,7 +95,7 @@ while ~end_simulation
     ref_vs = [ref_vs, v_ball_ref];    
 end % end of the main while loop
 %% Add control input for the final timestep.
-[u, theta_d] = controller_handle.stepController(t, x(1), x(3));
+[u, theta_d] = controller_handle.stepController(t, x(1), x(3), Ad, Bd, Cd, K_mx, L_mx);
 u = min(u, u_saturation);
 u = max(u, -u_saturation);
 us = [us, u];

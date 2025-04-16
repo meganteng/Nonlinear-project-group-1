@@ -19,69 +19,77 @@ classdef studentControllerInterface < matlab.System
         prev_t = -1;  % Previous time for finite difference
 
         %% Observer States
-        x_hat;  % Estimated state vector
+        x_hat = zeros(4, 1);  % Estimated state vector
         prev_u = 0; % Previous control input for observer
     end
 
     methods(Access = protected)
         function setupImpl(obj)
 
-            coder.extrinsic("c2d", "lqr", "place");
-
-            % Define system parameters
-            g = 9.81;   % Gravity (m/s^2)
-            tau = 0.025; % Motor time constant (s)
-            K_motor = 1.5; % Motor gain (rad/sV)
-            rg = 0.0254; % Servo arm length (m)
-            L_beam = 0.4255; % Beam length (m)
-
-            % Define system matrices (A, B, C)
-            Ac = [0 1 0 0;
-                0 0 5*g*rg/(7*L_beam) 0;
-                0 0 0 1;
-                0 0 0 -1/tau];
-            Bc = [0; 0; 0; K_motor/tau];
-            Cc = [1 0 0 0;
-                 0 0 1 0];
-            Q = diag([298, 6.87, 0, 0]); % Fill in your optimal Q matrix here
-            R = 0.406;    % Fill in your optimal R value here
-            dt = 0.01;  % Sampling time
-
-            % Discretize A, B using zero-order hold
-            [Ad, Bd] = c2d(Ac, Bc, dt);
-
-            % Save these
-            for i = 1:4
-                for j = 1:4
-                    obj.A(i, j) = Ad(i, j);
-                end
-            end
-            for i = 1:4
-                obj.B(i) = Bd(i);
-            end
-            obj.C = Cc;
-
-            % LQR gain can still be computed in continuous-time
-            K_mx = lqr(Ac, Bc, Q, R);
-            for i = 1:4
-                obj.K(i) = K_mx(i);
-            end
-
-            % Observer design: place discrete poles (can multiply continuous poles' magnitudes)
-            manual_pole_radius = 0.3;
-            manual_poles = manual_pole_radius * [0.5, 0.5, 0.9, 0.9];
-            L_mx = place(Ad', Cc', manual_poles)';  % Note the transpose
-            for i = 1:4
-                for j = 1:2
-                    obj.L(i, j) = L_mx(i, j);
-                end
-            end
-
-            % Initialize estimated state
-            obj.x_hat = zeros(4, 1); % [p_ball; v_ball; theta; dtheta]
+            % coder.extrinsic("c2d", "lqr", "place");
+            % 
+            % % Define system parameters
+            % g = 9.81;   % Gravity (m/s^2)
+            % tau = 0.025; % Motor time constant (s)
+            % K_motor = 1.5; % Motor gain (rad/sV)
+            % rg = 0.0254; % Servo arm length (m)
+            % L_beam = 0.4255; % Beam length (m)
+            % 
+            % % Define system matrices (A, B, C)
+            % Ac = [0 1 0 0;
+            %     0 0 5*g*rg/(7*L_beam) 0;
+            %     0 0 0 1;
+            %     0 0 0 -1/tau];
+            % Bc = [0; 0; 0; K_motor/tau];
+            % Cc = [1 0 0 0;
+            %      0 0 1 0];
+            % Q = diag([298, 6.87, 0, 0]); % Fill in your optimal Q matrix here
+            % R = 0.406;    % Fill in your optimal R value here
+            % dt = 0.01;  % Sampling time
+            % 
+            % % Discretize A, B using zero-order hold
+            % [Ad, Bd] = c2d(Ac, Bc, dt);
+            % 
+            % % Save these
+            % for i = 1:4
+            %     for j = 1:4
+            %         obj.A(i, j) = Ad(i, j);
+            %     end
+            % end
+            % for i = 1:4
+            %     obj.B(i) = Bd(i);
+            % end
+            % obj.C = Cc;
+            % 
+            % % LQR gain can still be computed in continuous-time
+            % K_mx = lqr(Ac, Bc, Q, R);
+            % for i = 1:4
+            %     obj.K(i) = K_mx(i);
+            % end
+            % 
+            % % Observer design: place discrete poles (can multiply continuous poles' magnitudes)
+            % manual_pole_radius = 0.3;
+            % manual_poles = manual_pole_radius * [0.5, 0.5, 0.9, 0.9];
+            % L_mx = place(Ad', Cc', manual_poles)';  % Note the transpose
+            % for i = 1:4
+            %     for j = 1:2
+            %         obj.L(i, j) = L_mx(i, j);
+            %     end
+            % end
+            % 
+            % % Initialize estimated state
+            % obj.x_hat = zeros(4, 1); % [p_ball; v_ball; theta; dtheta]
         end
 
-        function V_servo = stepImpl(obj, t, p_ball, theta)
+        function V_servo = stepImpl(obj, t, p_ball, theta, Ad, Bd, Cd, K_mx, L_mx)
+            obj.A = Ad;
+            obj.B = Bd;
+            obj.C = Cd;
+            obj.K = zeros(1, 4);
+            obj.K(:) = K_mx(:);
+            obj.L = zeros(4, 2);
+            obj.L(:, :) = L_mx(:, :);
+
             % Define system parameters
             g = 9.81;
             tau = 0.025;
@@ -149,8 +157,8 @@ classdef studentControllerInterface < matlab.System
     end
 
     methods(Access = public)
-        function [V_servo, theta_d] = stepController(obj, t, p_ball, theta)
-            V_servo = stepImpl(obj, t, p_ball, theta);
+        function [V_servo, theta_d] = stepController(obj, t, p_ball, theta, Ad, Bd, Cd, K_mx, L_mx)
+            V_servo = stepImpl(obj, t, p_ball, theta, Ad, Bd, Cd, K_mx, L_mx);
             theta_d = obj.theta_d;
         end
 
