@@ -7,9 +7,9 @@
  *
  * Code generation for model "simulink_experiment_debug_type1".
  *
- * Model version              : 16.0
+ * Model version              : 16.5
  * Simulink Coder version : 9.8 (R2022b) 13-May-2022
- * C source code generated on : Wed Apr 16 13:01:58 2025
+ * C source code generated on : Wed Apr 16 13:58:36 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -33,9 +33,10 @@
 #endif                    /* simulink_experiment_debug_type1_COMMON_INCLUDES_ */
 
 #include "simulink_experiment_debug_type1_types.h"
+#include "rtGetNaN.h"
+#include "rt_nonfinite.h"
 #include "rt_defines.h"
 #include <string.h>
-#include "rt_nonfinite.h"
 #include "zero_crossing_types.h"
 
 /* Macros for accessing real-time model data structure */
@@ -890,6 +891,7 @@ typedef struct {
   real_T RateTransition3;              /* '<Root>/Rate Transition3' */
   real_T RateTransition4;              /* '<Root>/Rate Transition4' */
   real_T RateTransition;               /* '<Root>/Rate Transition' */
+  real_T MovingAverage;                /* '<Root>/Moving Average' */
   real_T MATLABSystem;                 /* '<Root>/MATLAB System' */
   real_T p_ref;                        /* '<Root>/MATLAB Function' */
   real_T v_ref;                        /* '<Root>/MATLAB Function' */
@@ -898,7 +900,8 @@ typedef struct {
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  studentControllerInterface_si_T obj; /* '<Root>/MATLAB System' */
+  dsp_simulink_MovingAverage_si_T obj; /* '<Root>/Moving Average' */
+  studentControllerInterface_si_T obj_g;/* '<Root>/MATLAB System' */
   real_T HILInitialize_AIMinimums[2];  /* '<S1>/HIL Initialize' */
   real_T HILInitialize_AIMaximums[2];  /* '<S1>/HIL Initialize' */
   real_T HILInitialize_AOMinimums[2];  /* '<S1>/HIL Initialize' */
@@ -953,7 +956,8 @@ typedef struct {
   int32_T HILInitialize_InitialEICounts[2];/* '<S1>/HIL Initialize' */
   int32_T HILReadEncoderTimebase_Buffer;/* '<S1>/HIL Read Encoder Timebase' */
   boolean_T HILInitialize_DOBits[8];   /* '<S1>/HIL Initialize' */
-  boolean_T objisempty;                /* '<Root>/MATLAB System' */
+  boolean_T objisempty;                /* '<Root>/Moving Average' */
+  boolean_T objisempty_g;              /* '<Root>/MATLAB System' */
 } DW_simulink_experiment_debug__T;
 
 /* Backward compatible GRT Identifiers */
@@ -966,20 +970,8 @@ typedef struct {
 
 /* Parameters (default storage) */
 struct P_simulink_experiment_debug_t_T_ {
-  real_T Ad[16];                       /* Variable: Ad
-                                        * Referenced by: '<Root>/Constant'
-                                        */
-  real_T Bd[4];                        /* Variable: Bd
-                                        * Referenced by: '<Root>/Constant1'
-                                        */
-  real_T Cd[8];                        /* Variable: Cd
-                                        * Referenced by: '<Root>/Constant2'
-                                        */
   real_T K_mx[4];                      /* Variable: K_mx
                                         * Referenced by: '<Root>/Constant3'
-                                        */
-  real_T L_mx[8];                      /* Variable: L_mx
-                                        * Referenced by: '<Root>/Constant4'
                                         */
   uint32_T HILReadAnalog_channels;     /* Mask Parameter: HILReadAnalog_channels
                                         * Referenced by: '<S1>/HIL Read Analog'

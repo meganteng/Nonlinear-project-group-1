@@ -7,9 +7,9 @@
  *
  * Code generation for model "simulink_experiment_debug_type1".
  *
- * Model version              : 16.0
+ * Model version              : 16.5
  * Simulink Coder version : 9.8 (R2022b) 13-May-2022
- * C source code generated on : Wed Apr 16 13:01:58 2025
+ * C source code generated on : Wed Apr 16 13:58:36 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -27,6 +27,5 @@
 
 /* A global buffer for storing error messages (defined in quanser_common library) */
 EXTERN char _rt_error_message[512];
-extern real_T rt_powd_snf(real_T u0, real_T u1);
 
 #endif               /* RTW_HEADER_simulink_experiment_debug_type1_private_h_ */

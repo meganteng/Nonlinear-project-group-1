@@ -3,9 +3,6 @@ classdef studentControllerInterface_LQR_full_feedback < matlab.System
 
     properties (Access = private)
 
-        %% Controller Properties
-        K = zeros(1, 4);  % LQR Gain Matrix
-
         %% Internal States
         t_prev = -1;   % Previous timestep
         theta_d = 0;   % Desired beam angle
@@ -17,37 +14,37 @@ classdef studentControllerInterface_LQR_full_feedback < matlab.System
     
     methods(Access = protected)
         function setupImpl(obj)
-
-            coder.extrinsic("lqr");
-
-            % Define system parameters
-            g = 9.81;   % Gravity (m/s^2)
-            tau = 0.025; % Motor time constant (s)
-            K_motor = 1.5; % Motor gain (rad/sV)
-            rg = 0.0254; % Servo arm length (m)
-            L = 0.4255; % Beam length (m)
-
-            % Define updated A, B matrices with tau included
-            A = [0 1 0 0; 
-                 0 0 5*g*rg/(7*L) 0; 
-                 0 0 0 1; 
-                 0 0 0 -1/tau];
-
-            B = [0; 0; 0; K_motor/tau];
-
-            % Define LQR weight matrices
-            Q = diag([100, 0.3, 0, 0]); % Adjusted Q for smoother control
-            R = 0.2;  % Increased control effort penalty
-
-            % Compute LQR gain
-            K_mx = lqr(A, B, Q, R);
-            for i = 1:4
-                obj.K(i) = K_mx(i);
-            end
+% 
+%             coder.extrinsic("lqr");
+% 
+%             % Define system parameters
+%             g = 9.81;   % Gravity (m/s^2)
+%             tau = 0.025; % Motor time constant (s)
+%             K_motor = 1.5; % Motor gain (rad/sV)
+%             rg = 0.0254; % Servo arm length (m)
+%             L = 0.4255; % Beam length (m)
+% 
+%             % Define updated A, B matrices with tau included
+%             A = [0 1 0 0; 
+%                  0 0 5*g*rg/(7*L) 0; 
+%                  0 0 0 1; 
+%                  0 0 0 -1/tau];
+% 
+%             B = [0; 0; 0; K_motor/tau];
+% 
+%             % Define LQR weight matrices
+%             Q = diag([100, 0.3, 0, 0]); % Adjusted Q for smoother control
+%             R = 0.2;  % Increased control effort penalty
+% 
+%             % Compute LQR gain
+%             K_mx = lqr(A, B, Q, R);
+%             for i = 1:4
+%                 obj.K(i) = K_mx(i);
+%             end
 
         end
 
-        function V_servo = stepImpl(obj, t, p_ball, theta)
+        function V_servo = stepImpl(obj, t, p_ball, theta, K_mx)
             % Define system parameters
             g = 9.81;   
             tau = 0.025;
@@ -74,7 +71,7 @@ classdef studentControllerInterface_LQR_full_feedback < matlab.System
             x = [p_ball - p_ball_ref; v_ball - v_ball_ref; theta; v_theta];
 
             % Compute optimal control input using LQR (virtual input)
-            v = -obj.K * x + a_ball_ref;
+            v = -K_mx * x + a_ball_ref;
 
             % Feedback linearization: Compute the control input u
             % Third derivative of the output (ball position)
@@ -119,8 +116,8 @@ classdef studentControllerInterface_LQR_full_feedback < matlab.System
     end
     
     methods(Access = public)
-        function [V_servo, theta_d] = stepController(obj, t, p_ball, theta)    
-            V_servo = stepImpl(obj, t, p_ball, theta);
+        function [V_servo, theta_d] = stepController(obj, t, p_ball, theta, K_mx)    
+            V_servo = stepImpl(obj, t, p_ball, theta, K_mx);
             theta_d = obj.theta_d;
         end
     end

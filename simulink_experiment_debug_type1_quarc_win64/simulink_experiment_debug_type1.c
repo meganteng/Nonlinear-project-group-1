@@ -7,9 +7,9 @@
  *
  * Code generation for model "simulink_experiment_debug_type1".
  *
- * Model version              : 16.0
+ * Model version              : 16.5
  * Simulink Coder version : 9.8 (R2022b) 13-May-2022
- * C source code generated on : Wed Apr 16 13:01:58 2025
+ * C source code generated on : Wed Apr 16 13:58:36 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -19,13 +19,12 @@
  */
 
 #include "simulink_experiment_debug_type1.h"
-#include "rtwtypes.h"
 #include "simulink_experiment_debug_type1_types.h"
-#include <string.h>
+#include "rtwtypes.h"
 #include <math.h>
-#include <emmintrin.h>
-#include "simulink_experiment_debug_type1_private.h"
 #include "rt_nonfinite.h"
+#include "simulink_experiment_debug_type1_private.h"
+#include <string.h>
 #include "simulink_experiment_debug_type1_dt.h"
 
 /* Block signals (default storage) */
@@ -38,6 +37,9 @@ DW_simulink_experiment_debug__T simulink_experiment_debug_ty_DW;
 static RT_MODEL_simulink_experiment__T simulink_experiment_debug_ty_M_;
 RT_MODEL_simulink_experiment__T *const simulink_experiment_debug_ty_M =
   &simulink_experiment_debug_ty_M_;
+
+/* Forward declaration for local functions */
+static void simulink_exper_SystemCore_setup(dsp_simulink_MovingAverage_si_T *obj);
 static void rate_monotonic_scheduler(void);
 time_T rt_SimUpdateDiscreteEvents(
   int_T rtmNumSampTimes, void *rtmTimingData, int_T *rtmSampleHitPtr, int_T
@@ -88,75 +90,49 @@ static void rate_monotonic_scheduler(void)
   }
 }
 
-real_T rt_powd_snf(real_T u0, real_T u1)
+static void simulink_exper_SystemCore_setup(dsp_simulink_MovingAverage_si_T *obj)
 {
-  real_T tmp;
-  real_T tmp_0;
-  real_T y;
-  if (rtIsNaN(u0) || rtIsNaN(u1)) {
-    y = (rtNaN);
-  } else {
-    tmp = fabs(u0);
-    tmp_0 = fabs(u1);
-    if (rtIsInf(u1)) {
-      if (tmp == 1.0) {
-        y = 1.0;
-      } else if (tmp > 1.0) {
-        if (u1 > 0.0) {
-          y = (rtInf);
-        } else {
-          y = 0.0;
-        }
-      } else if (u1 > 0.0) {
-        y = 0.0;
-      } else {
-        y = (rtInf);
-      }
-    } else if (tmp_0 == 0.0) {
-      y = 1.0;
-    } else if (tmp_0 == 1.0) {
-      if (u1 > 0.0) {
-        y = u0;
-      } else {
-        y = 1.0 / u0;
-      }
-    } else if (u1 == 2.0) {
-      y = u0 * u0;
-    } else if ((u1 == 0.5) && (u0 >= 0.0)) {
-      y = sqrt(u0);
-    } else if ((u0 < 0.0) && (u1 > floor(u1))) {
-      y = (rtNaN);
-    } else {
-      y = pow(u0, u1);
-    }
-  }
-
-  return y;
+  dsp_simulink_MovingAverage_si_T *obj_0;
+  g_dsp_internal_SlidingWindowA_T *iobj_0;
+  obj->isSetupComplete = false;
+  obj->isInitialized = 1;
+  obj_0 = obj;
+  obj_0->NumChannels = 1;
+  obj_0->FrameLength = 1;
+  iobj_0 = &obj_0->_pobj0;
+  iobj_0->isInitialized = 0;
+  iobj_0->isInitialized = 0;
+  obj_0->pStatistic = iobj_0;
+  obj->isSetupComplete = true;
+  obj->TunablePropsChanged = false;
 }
 
 /* Model output function for TID0 */
 void simulink_experiment_debug_type1_output0(void) /* Sample time: [0.0s, 0.0s] */
 {
-  __m128d tmp;
-  __m128d tmp_0;
+  dsp_simulink_MovingAverage_si_T *obj_0;
+  dsp_simulink_MovingAverage_si_T *obj_1;
+  g_dsp_internal_SlidingWindowA_T *obj_2;
+  g_dsp_internal_SlidingWindowA_T *obj_3;
+  g_dsp_internal_SlidingWindowA_T *obj_4;
+  g_dsp_internal_SlidingWindowA_T *obj_5;
   studentControllerInterface_si_T *obj;
-  real_T Ad[16];
-  real_T Cd[8];
-  real_T b[4];
-  real_T x[4];
-  real_T y[2];
-  const real_T *L_mx;
-  real_T Bd;
-  real_T Bd_idx_3;
-  real_T br;
-  real_T dtheta_hat;
-  real_T omega;
-  real_T p_ball_hat;
-  real_T theta_hat;
-  real_T v;
-  real_T v_ball_hat;
-  real_T v_ball_ref;
+  real_T csumrev[9];
+  real_T K_mx_idx_1;
+  real_T K_mx_idx_2;
+  real_T K_mx_idx_3;
+  real_T amp;
+  real_T csum;
+  real_T cumRevIndex;
+  real_T omega_min;
+  real_T phase_sine_end;
+  real_T phase_square_end;
+  real_T phase_zero2_end;
+  real_T phase_zero_end;
+  real_T t_sine_ratio;
+  real_T x;
   real_T x_0;
+  real_T x_idx_0;
   int32_T i;
 
   {                                    /* Sample time: [0.0s, 0.0s] */
@@ -220,285 +196,287 @@ void simulink_experiment_debug_type1_output0(void) /* Sample time: [0.0s, 0.0s] 
     simulink_experiment_debug_ty_M->Timing.t[0];
 
   /* MATLABSystem: '<Root>/MATLAB System' incorporates:
-   *  Constant: '<Root>/Constant'
-   *  Constant: '<Root>/Constant1'
-   *  Constant: '<Root>/Constant2'
    *  Constant: '<Root>/Constant3'
-   *  Constant: '<Root>/Constant4'
    */
-  dtheta_hat = simulink_experiment_debug_typ_B.Clock;
-  theta_hat = simulink_experiment_debug_typ_B.BB01SensorGainmV;
-  p_ball_hat = simulink_experiment_debug_typ_B.Bias;
-  memcpy(&Ad[0], &simulink_experiment_debug_typ_P.Ad[0], sizeof(real_T) << 4U);
-  v_ball_hat = simulink_experiment_debug_typ_P.Bd[0];
-  omega = simulink_experiment_debug_typ_P.Bd[1];
-  br = simulink_experiment_debug_typ_P.Bd[2];
-  Bd_idx_3 = simulink_experiment_debug_typ_P.Bd[3];
-  x[0] = simulink_experiment_debug_typ_P.K_mx[0];
-  x[1] = simulink_experiment_debug_typ_P.K_mx[1];
-  x[2] = simulink_experiment_debug_typ_P.K_mx[2];
-  x[3] = simulink_experiment_debug_typ_P.K_mx[3];
-  memcpy(&Cd[0], &simulink_experiment_debug_typ_P.Cd[0], sizeof(real_T) << 3U);
-  L_mx = &simulink_experiment_debug_typ_P.L_mx[0];
-  obj = &simulink_experiment_debug_ty_DW.obj;
-  for (i = 0; i < 16; i++) {
-    obj->A[i] = Ad[i];
-  }
-
-  obj->B[0] = v_ball_hat;
-  obj->B[1] = omega;
-  obj->B[2] = br;
-  obj->B[3] = Bd_idx_3;
-  for (i = 0; i < 8; i++) {
-    obj->C[i] = Cd[i];
-  }
-
-  obj->K[0] = 0.0;
-  obj->K[1] = 0.0;
-  obj->K[2] = 0.0;
-  obj->K[3] = 0.0;
-  obj->K[0] = x[0];
-  obj->K[1] = x[1];
-  obj->K[2] = x[2];
-  obj->K[3] = x[3];
-  for (i = 0; i < 8; i++) {
-    obj->L[i] = 0.0;
-  }
-
-  for (i = 0; i < 2; i++) {
-    obj->L[i << 2] = L_mx[i << 2];
-    obj->L[(i << 2) + 1] = L_mx[(i << 2) + 1];
-    obj->L[(i << 2) + 2] = L_mx[(i << 2) + 2];
-    obj->L[(i << 2) + 3] = L_mx[(i << 2) + 3];
-  }
+  amp = simulink_experiment_debug_typ_B.Clock;
+  cumRevIndex = simulink_experiment_debug_typ_B.BB01SensorGainmV;
+  csum = simulink_experiment_debug_typ_B.Bias;
+  omega_min = simulink_experiment_debug_typ_P.K_mx[0];
+  K_mx_idx_1 = simulink_experiment_debug_typ_P.K_mx[1];
+  K_mx_idx_2 = simulink_experiment_debug_typ_P.K_mx[2];
+  K_mx_idx_3 = simulink_experiment_debug_typ_P.K_mx[3];
+  obj = &simulink_experiment_debug_ty_DW.obj_g;
 
   /*  Define system parameters */
   /*  Get reference trajectory */
-  x_0 = 1.0471975511965976 * dtheta_hat;
-  x_0 = sin(x_0);
-  v = 0.04 * x_0;
-  x_0 = 1.0471975511965976 * dtheta_hat;
-  x_0 = cos(x_0);
-  v_ball_ref = 0.041887902047863905 * x_0;
-  x_0 = 1.0471975511965976 * dtheta_hat;
-  x_0 = sin(x_0);
-  x_0 *= -0.043864908449286026;
+  if (amp < 5.0) {
+    phase_sine_end = 0.0;
+    t_sine_ratio = 0.0;
+  } else if (amp < 61.85) {
+    phase_sine_end = amp - 5.0;
+    t_sine_ratio = phase_sine_end / 56.85;
+    phase_square_end = 0.14;
+    if (t_sine_ratio < 0.5) {
+      phase_square_end = t_sine_ratio / 0.5 * 0.090000000000000011 + 0.05;
+      phase_zero_end = 6.2831853071795862 * phase_sine_end / 55.0;
+      phase_zero_end = cos(phase_zero_end);
+      phase_zero_end = 0.83775804095727813 - 3.1415926535897931 * phase_zero_end
+        / 15.0;
+      t_sine_ratio = phase_zero_end * phase_zero_end;
+      phase_zero_end = 6.2831853071795862 * phase_sine_end / 55.0;
+      phase_zero_end = sin(phase_zero_end);
+      phase_zero_end = 11.0 * phase_zero_end / 6.0 - 12.566370614359172 *
+        phase_sine_end / 15.0;
+      phase_zero_end = cos(phase_zero_end);
+      x_idx_0 = 6.2831853071795862 * phase_sine_end / 55.0;
+      x_idx_0 = cos(x_idx_0);
+      phase_zero2_end = 6.2831853071795862 * phase_sine_end / 55.0;
+      phase_zero2_end = sin(phase_zero2_end);
+      phase_zero2_end = 11.0 * phase_zero2_end / 6.0 - 12.566370614359172 *
+        phase_sine_end / 15.0;
+      phase_zero2_end = sin(phase_zero2_end);
+      x = 6.2831853071795862 * phase_sine_end / 55.0;
+      x = sin(x);
+      x_0 = 6.2831853071795862 * phase_sine_end / 55.0;
+      x_0 = sin(x_0);
+      x_0 = 11.0 * x_0 / 6.0 - 12.566370614359172 * phase_sine_end / 15.0;
+      x_0 = cos(x_0);
+      t_sine_ratio = ((0.83775804095727813 - 3.1415926535897931 * x_idx_0 / 15.0)
+                      * (12.0 * phase_zero_end) / 1895.0 + (6.0 * phase_sine_end
+        / 1895.0 + 0.05) * phase_zero2_end * t_sine_ratio) + (6.0 *
+        phase_sine_end / 1895.0 + 0.05) * (19.739208802178716 * x * x_0) / 825.0;
+    } else {
+      phase_zero_end = 6.2831853071795862 * phase_sine_end / 55.0;
+      phase_zero_end = cos(phase_zero_end);
+      phase_zero_end = 0.83775804095727813 - 3.1415926535897931 * phase_zero_end
+        / 15.0;
+      t_sine_ratio = phase_zero_end * phase_zero_end;
+      phase_zero_end = 6.2831853071795862 * phase_sine_end / 55.0;
+      phase_zero_end = sin(phase_zero_end);
+      phase_zero_end = 11.0 * phase_zero_end / 6.0 - 12.566370614359172 *
+        phase_sine_end / 15.0;
+      phase_zero_end = sin(phase_zero_end);
+      x_idx_0 = 6.2831853071795862 * phase_sine_end / 55.0;
+      x_idx_0 = sin(x_idx_0);
+      phase_zero2_end = 6.2831853071795862 * phase_sine_end / 55.0;
+      phase_zero2_end = sin(phase_zero2_end);
+      phase_zero2_end = 11.0 * phase_zero2_end / 6.0 - 12.566370614359172 *
+        phase_sine_end / 15.0;
+      phase_zero2_end = cos(phase_zero2_end);
+      t_sine_ratio = 7.0 * phase_zero_end * t_sine_ratio / 50.0 +
+        69.0872308076255 * x_idx_0 * phase_zero2_end / 20625.0;
+    }
 
-  /*  Luenberger observer update */
-  /*  Measured output */
-  /*  % Observer dynamics */
-  /*  dx_hat = A * obj.x_hat + B * obj.prev_u + obj.L * (y - C * obj.x_hat); */
-  /*  obj.x_hat = obj.x_hat + dx_hat * dt; */
-  for (i = 0; i < 16; i++) {
-    Ad[i] = obj->A[i];
+    phase_zero_end = 0.11423973285781065 * phase_sine_end;
+    phase_zero_end = sin(phase_zero_end);
+    phase_zero_end = 0.83775804095727813 * phase_sine_end - 0.2094395102393195 *
+      phase_zero_end / 0.11423973285781065;
+    phase_zero_end = sin(phase_zero_end);
+    phase_sine_end = phase_square_end * phase_zero_end;
+  } else if (amp < 65.0) {
+    phase_sine_end = 0.0;
+    t_sine_ratio = 0.0;
+  } else if (amp < 85.0) {
+    phase_zero_end = amp - 65.0;
+    phase_sine_end = phase_zero_end / 20.0;
+    if (phase_sine_end < 0.5) {
+      phase_sine_end = 0.05;
+    } else {
+      phase_sine_end = 0.1;
+    }
+
+    phase_zero_end *= 0.62831853071795862;
+    phase_zero_end = sin(phase_zero_end);
+    if (phase_zero_end < 0.0) {
+      phase_zero_end = -1.0;
+    } else {
+      phase_zero_end = (phase_zero_end > 0.0);
+    }
+
+    phase_sine_end *= phase_zero_end;
+    t_sine_ratio = 0.0;
+  } else {
+    phase_sine_end = 0.0;
+    t_sine_ratio = 0.0;
   }
 
-  b[0] = obj->x_hat[0];
-  b[1] = obj->x_hat[1];
-  b[2] = obj->x_hat[2];
-  b[3] = obj->x_hat[3];
-  for (i = 0; i <= 2; i += 2) {
-    /* MATLABSystem: '<Root>/MATLAB System' */
-    tmp = _mm_loadu_pd(&Ad[i]);
-    tmp = _mm_mul_pd(tmp, _mm_set1_pd(b[0]));
-    tmp = _mm_add_pd(tmp, _mm_set1_pd(0.0));
-    tmp_0 = _mm_loadu_pd(&Ad[i + 4]);
-    tmp_0 = _mm_mul_pd(tmp_0, _mm_set1_pd(b[1]));
-    tmp = _mm_add_pd(tmp_0, tmp);
+  /*  Compute time step for velocity estimation */
+  if (obj->prev_t == -1.0) {
+    phase_zero2_end = 0.001;
 
-    /* MATLABSystem: '<Root>/MATLAB System' */
-    tmp_0 = _mm_loadu_pd(&Ad[i + 8]);
-    tmp_0 = _mm_mul_pd(tmp_0, _mm_set1_pd(b[2]));
-    tmp = _mm_add_pd(tmp_0, tmp);
-
-    /* MATLABSystem: '<Root>/MATLAB System' */
-    tmp_0 = _mm_loadu_pd(&Ad[i + 12]);
-    tmp_0 = _mm_mul_pd(tmp_0, _mm_set1_pd(b[3]));
-    tmp = _mm_add_pd(tmp_0, tmp);
-
-    /* MATLABSystem: '<Root>/MATLAB System' */
-    _mm_storeu_pd(&x[i], tmp);
+    /*  Avoid division by zero on first call */
+  } else {
+    phase_zero2_end = amp - obj->prev_t;
+    if (!(phase_zero2_end >= 0.03)) {
+      phase_zero2_end = 0.03;
+    }
   }
 
-  /* MATLABSystem: '<Root>/MATLAB System' */
-  v_ball_hat = obj->B[0];
-  omega = obj->B[1];
-  br = obj->B[2];
-  Bd_idx_3 = obj->B[3];
-  dtheta_hat = obj->prev_u;
-  Bd = v_ball_hat;
-  Bd *= dtheta_hat;
-  v_ball_hat = Bd;
-  Bd = omega;
-  Bd *= dtheta_hat;
-  omega = Bd;
-  Bd = br;
-  Bd *= dtheta_hat;
-  br = Bd;
-  Bd = Bd_idx_3;
-  Bd *= dtheta_hat;
-  Bd_idx_3 = Bd;
-  for (i = 0; i < 8; i++) {
-    Cd[i] = obj->C[i];
-  }
+  /*  Estimate velocities using finite difference */
+  phase_zero_end = (cumRevIndex - obj->prev_p_ball) / phase_zero2_end;
+  phase_square_end = (csum - obj->prev_theta) / phase_zero2_end;
+  phase_zero2_end = (phase_sine_end - obj->prev_p_ball_ref) / phase_zero2_end;
 
-  b[0] = obj->x_hat[0];
-  b[1] = obj->x_hat[1];
-  b[2] = obj->x_hat[2];
-  b[3] = obj->x_hat[3];
-  for (i = 0; i <= 0; i += 2) {
-    /* MATLABSystem: '<Root>/MATLAB System' */
-    tmp = _mm_loadu_pd(&Cd[i]);
-    tmp = _mm_mul_pd(tmp, _mm_set1_pd(b[0]));
-    tmp = _mm_add_pd(tmp, _mm_set1_pd(0.0));
-    tmp_0 = _mm_loadu_pd(&Cd[i + 2]);
-    tmp_0 = _mm_mul_pd(tmp_0, _mm_set1_pd(b[1]));
-    tmp = _mm_add_pd(tmp_0, tmp);
-
-    /* MATLABSystem: '<Root>/MATLAB System' */
-    tmp_0 = _mm_loadu_pd(&Cd[i + 4]);
-    tmp_0 = _mm_mul_pd(tmp_0, _mm_set1_pd(b[2]));
-    tmp = _mm_add_pd(tmp_0, tmp);
-
-    /* MATLABSystem: '<Root>/MATLAB System' */
-    tmp_0 = _mm_loadu_pd(&Cd[i + 6]);
-    tmp_0 = _mm_mul_pd(tmp_0, _mm_set1_pd(b[3]));
-    tmp = _mm_add_pd(tmp_0, tmp);
-
-    /* MATLABSystem: '<Root>/MATLAB System' */
-    _mm_storeu_pd(&y[i], tmp);
-  }
-
-  /* MATLABSystem: '<Root>/MATLAB System' */
-  for (i = 0; i < 8; i++) {
-    Cd[i] = obj->L[i];
-  }
-
-  dtheta_hat = theta_hat;
-  dtheta_hat -= y[0];
-  theta_hat = dtheta_hat;
-  dtheta_hat = p_ball_hat;
-  dtheta_hat -= y[1];
-  p_ball_hat = dtheta_hat;
-  for (i = 0; i <= 2; i += 2) {
-    /* MATLABSystem: '<Root>/MATLAB System' */
-    tmp = _mm_loadu_pd(&Cd[i]);
-    tmp = _mm_mul_pd(tmp, _mm_set1_pd(theta_hat));
-    tmp = _mm_add_pd(tmp, _mm_set1_pd(0.0));
-    tmp_0 = _mm_loadu_pd(&Cd[i + 4]);
-    tmp_0 = _mm_mul_pd(tmp_0, _mm_set1_pd(p_ball_hat));
-    tmp = _mm_add_pd(tmp_0, tmp);
-
-    /* MATLABSystem: '<Root>/MATLAB System' */
-    _mm_storeu_pd(&b[i], tmp);
-  }
-
-  /* MATLABSystem: '<Root>/MATLAB System' */
-  obj->x_hat[0] = (x[0] + v_ball_hat) + b[0];
-  obj->x_hat[1] = (x[1] + omega) + b[1];
-  obj->x_hat[2] = (x[2] + br) + b[2];
-  obj->x_hat[3] = (x[3] + Bd_idx_3) + b[3];
-
-  /*  Extract estimated states */
-  p_ball_hat = obj->x_hat[0];
-  v_ball_hat = obj->x_hat[1];
-  theta_hat = obj->x_hat[2];
-  dtheta_hat = obj->x_hat[3];
-
+  /*  Reference velocity */
   /*  Construct the state vector with estimated velocities */
-  x[0] = p_ball_hat - v;
-  x[1] = v_ball_hat - v_ball_ref;
-  x[2] = theta_hat;
-  x[3] = dtheta_hat;
+  x_idx_0 = cumRevIndex - phase_sine_end;
+  phase_zero2_end = phase_zero_end - phase_zero2_end;
 
   /*  Compute optimal control input using LQR (virtual input) */
-  v_ball_hat = -obj->K[0];
-  omega = -obj->K[1];
-  br = -obj->K[2];
-  Bd_idx_3 = -obj->K[3];
-  v_ball_hat *= x[0];
-  v_ball_hat += omega * x[1];
-  v_ball_hat += br * x[2];
-  v_ball_hat += Bd_idx_3 * x[3];
-  v = v_ball_hat + x_0;
+  obj->K[0] = omega_min;
+  obj->K[1] = K_mx_idx_1;
+  obj->K[2] = K_mx_idx_2;
+  obj->K[3] = K_mx_idx_3;
+  omega_min = -obj->K[0];
+  K_mx_idx_1 = -obj->K[1];
+  K_mx_idx_2 = -obj->K[2];
+  K_mx_idx_3 = -obj->K[3];
+  phase_zero_end = omega_min * x_idx_0;
+  phase_zero_end += K_mx_idx_1 * phase_zero2_end;
+  phase_zero_end += K_mx_idx_2 * csum;
+  phase_zero_end += K_mx_idx_3 * phase_square_end;
+  omega_min = phase_zero_end + t_sine_ratio;
 
   /*  Feedback linearization: Compute the control input u */
+  /*  Third derivative of the output (ball position) */
+  /*  dddy = v (desired third derivative from LQR) */
+  /*  We need to solve for u in the equation dddy = v */
+  /*  Compute intermediate terms */
+  /*  First derivative of theta (already estimated as v_theta) */
   /*  Nonlinear terms in the third derivative */
-  v_ball_ref = rt_powd_snf(dtheta_hat, 3.0);
-  x_0 = theta_hat;
-  x_0 = cos(x_0);
-  omega = x_0 * x_0;
-  br = rt_powd_snf(dtheta_hat, 3.0);
-  x_0 = theta_hat;
-  x_0 = cos(x_0);
-  Bd_idx_3 = x_0 * x_0;
-  x_0 = theta_hat;
-  x_0 = cos(x_0);
-  v_ball_hat = theta_hat;
-  v_ball_hat = sin(v_ball_hat);
-  Bd = theta_hat;
-  Bd = sin(Bd);
-  v_ball_hat = (0.41828772872251135 * x_0 * dtheta_hat - 2.0 * v_ball_ref *
-                omega * v_ball_hat * 0.00054151418499244583) + 2.0 * br *
-    Bd_idx_3 * Bd * (0.0025453075675320605 * p_ball_hat);
-
   /*  Solve for u to achieve dddy = v */
-  x_0 = theta_hat;
-  x_0 = cos(x_0);
-  br = (v - v_ball_hat) * 0.025 / (0.41828772872251135 * x_0 * 1.5);
-
   /*  Apply physical constraints */
   /*  Limit servo movement to ±45 degrees */
-  v_ball_ref = dtheta_hat * dtheta_hat;
-  x_0 = theta_hat;
-  x_0 = cos(x_0);
-  omega = x_0 * x_0;
-  p_ball_hat = ((0.21275 - p_ball_hat) * 0.7142857142857143 *
-                0.0035634305945448845 * v_ball_ref * omega + v) *
-    2.3906988690633852;
-  if (!(p_ball_hat >= -1.0)) {
-    p_ball_hat = -1.0;
+  t_sine_ratio = phase_square_end * phase_square_end;
+  phase_zero_end = csum;
+  phase_zero_end = cos(phase_zero_end);
+  phase_square_end = phase_zero_end * phase_zero_end;
+  phase_zero2_end = ((0.21275 - cumRevIndex) * 0.7142857142857143 *
+                     0.0035634305945448845 * t_sine_ratio * phase_square_end +
+                     omega_min) * 2.3906988690633852;
+  if (!(phase_zero2_end >= -1.0)) {
+    phase_zero2_end = -1.0;
   }
 
-  if (!(p_ball_hat <= 1.0)) {
-    p_ball_hat = 1.0;
+  if (!(phase_zero2_end <= 1.0)) {
+    phase_zero2_end = 1.0;
   }
 
-  p_ball_hat = asin(p_ball_hat);
+  phase_zero2_end = asin(phase_zero2_end);
 
   /*  Ensure valid range for asin */
-  if (!(p_ball_hat <= 0.78539816339744828)) {
-    p_ball_hat = 0.78539816339744828;
+  if (!(phase_zero2_end <= 0.78539816339744828)) {
+    phase_zero2_end = 0.78539816339744828;
   }
 
-  if (!(p_ball_hat >= -0.78539816339744828)) {
-    p_ball_hat = -0.78539816339744828;
+  if (!(phase_zero2_end >= -0.78539816339744828)) {
+    phase_zero2_end = -0.78539816339744828;
   }
 
   /*  Compute servo voltage */
   /*  Servo gain */
-  theta_hat = (p_ball_hat - theta_hat) * 10.0;
+  phase_zero2_end = (phase_zero2_end - csum) * 10.0;
 
   /*  Store values for next iteration */
-  obj->prev_u = br;
+  obj->prev_p_ball = cumRevIndex;
+  obj->prev_theta = csum;
+  obj->prev_p_ball_ref = phase_sine_end;
+  obj->prev_t = amp;
 
   /* MATLABSystem: '<Root>/MATLAB System' */
-  /*  Store control input for observer */
-  simulink_experiment_debug_typ_B.MATLABSystem = theta_hat;
+  simulink_experiment_debug_typ_B.MATLABSystem = phase_zero2_end;
+
+  /* MATLABSystem: '<Root>/Moving Average' */
+  amp = simulink_experiment_debug_typ_B.MATLABSystem;
+  obj_0 = &simulink_experiment_debug_ty_DW.obj;
+  obj_1 = obj_0;
+  if (obj_1->TunablePropsChanged) {
+    obj_1->TunablePropsChanged = false;
+  }
+
+  obj_2 = obj_0->pStatistic;
+  if (obj_2->isInitialized != 1) {
+    obj_3 = obj_2;
+    obj_4 = obj_3;
+    obj_4->isSetupComplete = false;
+    obj_4->isInitialized = 1;
+    obj_5 = obj_4;
+    obj_5->pCumSum = 0.0;
+    for (i = 0; i < 9; i++) {
+      obj_5->pCumSumRev[i] = 0.0;
+    }
+
+    obj_5->pCumRevIndex = 1.0;
+    obj_5->pModValueRev = 0.0;
+    obj_4->isSetupComplete = true;
+    obj_3->pCumSum = 0.0;
+    for (i = 0; i < 9; i++) {
+      obj_3->pCumSumRev[i] = 0.0;
+    }
+
+    obj_3->pCumRevIndex = 1.0;
+    obj_3->pModValueRev = 0.0;
+  }
+
+  cumRevIndex = obj_2->pCumRevIndex;
+  csum = obj_2->pCumSum;
+  for (i = 0; i < 9; i++) {
+    csumrev[i] = obj_2->pCumSumRev[i];
+  }
+
+  phase_zero_end = obj_2->pModValueRev;
+  phase_sine_end = 0.0;
+  phase_zero2_end = 0.0;
+  csum += amp;
+  if (phase_zero_end == 0.0) {
+    phase_sine_end = csumrev[(int32_T)cumRevIndex - 1] + csum;
+  }
+
+  csumrev[(int32_T)cumRevIndex - 1] = amp;
+  if (cumRevIndex != 9.0) {
+    cumRevIndex++;
+  } else {
+    cumRevIndex = 1.0;
+    csum = 0.0;
+    for (i = 7; i >= 0; i--) {
+      csumrev[i] += csumrev[i + 1];
+    }
+  }
+
+  if (phase_zero_end == 0.0) {
+    phase_zero2_end = phase_sine_end / 10.0;
+  }
+
+  if (phase_zero_end > 0.0) {
+    phase_zero_end--;
+  } else {
+    phase_zero_end = 0.0;
+  }
+
+  obj_2->pCumSum = csum;
+  for (i = 0; i < 9; i++) {
+    obj_2->pCumSumRev[i] = csumrev[i];
+  }
+
+  obj_2->pCumRevIndex = cumRevIndex;
+  obj_2->pModValueRev = phase_zero_end;
+
+  /* MATLABSystem: '<Root>/Moving Average' */
+  simulink_experiment_debug_typ_B.MovingAverage = phase_zero2_end;
 
   /* Saturate: '<Root>/+//-10V' */
-  theta_hat = simulink_experiment_debug_typ_B.MATLABSystem;
-  p_ball_hat = simulink_experiment_debug_typ_P.u0V_LowerSat;
-  v = simulink_experiment_debug_typ_P.u0V_UpperSat;
-  if (theta_hat > v) {
+  phase_sine_end = simulink_experiment_debug_typ_B.MovingAverage;
+  amp = simulink_experiment_debug_typ_P.u0V_LowerSat;
+  cumRevIndex = simulink_experiment_debug_typ_P.u0V_UpperSat;
+  if (phase_sine_end > cumRevIndex) {
     /* Saturate: '<Root>/+//-10V' */
-    simulink_experiment_debug_typ_B.u0V = v;
-  } else if (theta_hat < p_ball_hat) {
+    simulink_experiment_debug_typ_B.u0V = cumRevIndex;
+  } else if (phase_sine_end < amp) {
     /* Saturate: '<Root>/+//-10V' */
-    simulink_experiment_debug_typ_B.u0V = p_ball_hat;
+    simulink_experiment_debug_typ_B.u0V = amp;
   } else {
     /* Saturate: '<Root>/+//-10V' */
-    simulink_experiment_debug_typ_B.u0V = theta_hat;
+    simulink_experiment_debug_typ_B.u0V = phase_sine_end;
   }
 
   /* End of Saturate: '<Root>/+//-10V' */
@@ -526,12 +504,100 @@ void simulink_experiment_debug_type1_output0(void) /* Sample time: [0.0s, 0.0s] 
   /* MATLAB Function: '<Root>/MATLAB Function' */
   /* MATLAB Function 'MATLAB Function': '<S2>:1' */
   /* '<S2>:1:3' */
-  simulink_experiment_debug_typ_B.p_ref = sin(1.0471975511965976 *
-    simulink_experiment_debug_typ_B.Clock) * 0.04;
-  simulink_experiment_debug_typ_B.v_ref = cos(1.0471975511965976 *
-    simulink_experiment_debug_typ_B.Clock) * 0.041887902047863905;
-  simulink_experiment_debug_typ_B.a_ref = sin(1.0471975511965976 *
-    simulink_experiment_debug_typ_B.Clock) * -0.043864908449286026;
+  if (simulink_experiment_debug_typ_B.Clock < 5.0) {
+    simulink_experiment_debug_typ_B.p_ref = 0.0;
+    simulink_experiment_debug_typ_B.v_ref = 0.0;
+    simulink_experiment_debug_typ_B.a_ref = 0.0;
+  } else if (simulink_experiment_debug_typ_B.Clock < 61.85) {
+    t_sine_ratio = (simulink_experiment_debug_typ_B.Clock - 5.0) / 56.85;
+    if (t_sine_ratio < 0.5) {
+      amp = t_sine_ratio / 0.5 * 0.090000000000000011 + 0.05;
+      simulink_experiment_debug_typ_B.v_ref = cos
+        ((simulink_experiment_debug_typ_B.Clock - 5.0) * 0.83775804095727813 -
+         sin((simulink_experiment_debug_typ_B.Clock - 5.0) * 0.11423973285781065)
+         * 0.2094395102393195 / 0.11423973285781065) * amp *
+        (0.83775804095727813 - cos((simulink_experiment_debug_typ_B.Clock - 5.0)
+          * 0.11423973285781065) * 0.2094395102393195) + sin
+        ((simulink_experiment_debug_typ_B.Clock - 5.0) * 0.83775804095727813 -
+         sin((simulink_experiment_debug_typ_B.Clock - 5.0) * 0.11423973285781065)
+         * 0.2094395102393195 / 0.11423973285781065) * 0.00316622691292876;
+      cumRevIndex = 0.83775804095727813 - cos
+        ((simulink_experiment_debug_typ_B.Clock - 5.0) * 6.2831853071795862 /
+         55.0) * 3.1415926535897931 / 15.0;
+      simulink_experiment_debug_typ_B.a_ref = (cos(sin
+        ((simulink_experiment_debug_typ_B.Clock - 5.0) * 6.2831853071795862 /
+         55.0) * 11.0 / 6.0 - (simulink_experiment_debug_typ_B.Clock - 5.0) *
+        12.566370614359172 / 15.0) * 12.0 * (0.83775804095727813 - cos
+        ((simulink_experiment_debug_typ_B.Clock - 5.0) * 6.2831853071795862 /
+         55.0) * 3.1415926535897931 / 15.0) / 1895.0 + sin(sin
+        ((simulink_experiment_debug_typ_B.Clock - 5.0) * 6.2831853071795862 /
+         55.0) * 11.0 / 6.0 - (simulink_experiment_debug_typ_B.Clock - 5.0) *
+        12.566370614359172 / 15.0) * ((simulink_experiment_debug_typ_B.Clock -
+        5.0) * 6.0 / 1895.0 + 0.05) * (cumRevIndex * cumRevIndex)) + cos(sin
+        ((simulink_experiment_debug_typ_B.Clock - 5.0) * 6.2831853071795862 /
+         55.0) * 11.0 / 6.0 - (simulink_experiment_debug_typ_B.Clock - 5.0) *
+        12.566370614359172 / 15.0) * (sin((simulink_experiment_debug_typ_B.Clock
+        - 5.0) * 6.2831853071795862 / 55.0) * 19.739208802178716) *
+        ((simulink_experiment_debug_typ_B.Clock - 5.0) * 6.0 / 1895.0 + 0.05) /
+        825.0;
+    } else {
+      amp = 0.14;
+      simulink_experiment_debug_typ_B.v_ref = cos
+        ((simulink_experiment_debug_typ_B.Clock - 5.0) * 0.83775804095727813 -
+         sin((simulink_experiment_debug_typ_B.Clock - 5.0) * 0.11423973285781065)
+         * 0.2094395102393195 / 0.11423973285781065) * 0.14 *
+        (0.83775804095727813 - cos((simulink_experiment_debug_typ_B.Clock - 5.0)
+          * 0.11423973285781065) * 0.2094395102393195);
+      phase_zero_end = 0.83775804095727813 - cos
+        ((simulink_experiment_debug_typ_B.Clock - 5.0) * 6.2831853071795862 /
+         55.0) * 3.1415926535897931 / 15.0;
+      simulink_experiment_debug_typ_B.a_ref = sin(sin
+        ((simulink_experiment_debug_typ_B.Clock - 5.0) * 6.2831853071795862 /
+         55.0) * 11.0 / 6.0 - (simulink_experiment_debug_typ_B.Clock - 5.0) *
+        12.566370614359172 / 15.0) * 7.0 * (phase_zero_end * phase_zero_end) /
+        50.0 + cos(sin((simulink_experiment_debug_typ_B.Clock - 5.0) *
+                       6.2831853071795862 / 55.0) * 11.0 / 6.0 -
+                   (simulink_experiment_debug_typ_B.Clock - 5.0) *
+                   12.566370614359172 / 15.0) * (sin
+        ((simulink_experiment_debug_typ_B.Clock - 5.0) * 6.2831853071795862 /
+         55.0) * 69.0872308076255) / 20625.0;
+    }
+
+    simulink_experiment_debug_typ_B.p_ref = sin
+      ((simulink_experiment_debug_typ_B.Clock - 5.0) * 0.83775804095727813 - sin
+       ((simulink_experiment_debug_typ_B.Clock - 5.0) * 0.11423973285781065) *
+       0.2094395102393195 / 0.11423973285781065) * amp;
+  } else if (simulink_experiment_debug_typ_B.Clock < 65.0) {
+    simulink_experiment_debug_typ_B.p_ref = 0.0;
+    simulink_experiment_debug_typ_B.v_ref = 0.0;
+    simulink_experiment_debug_typ_B.a_ref = 0.0;
+  } else if (simulink_experiment_debug_typ_B.Clock < 85.0) {
+    if ((simulink_experiment_debug_typ_B.Clock - 65.0) / 20.0 < 0.5) {
+      phase_sine_end = 0.05;
+    } else {
+      phase_sine_end = 0.1;
+    }
+
+    amp = sin((simulink_experiment_debug_typ_B.Clock - 65.0) *
+              0.62831853071795862);
+    if (rtIsNaN(amp)) {
+      amp = (rtNaN);
+    } else if (amp < 0.0) {
+      amp = -1.0;
+    } else {
+      amp = (amp > 0.0);
+    }
+
+    simulink_experiment_debug_typ_B.p_ref = phase_sine_end * amp;
+    simulink_experiment_debug_typ_B.v_ref = 0.0;
+    simulink_experiment_debug_typ_B.a_ref = 0.0;
+  } else {
+    simulink_experiment_debug_typ_B.p_ref = 0.0;
+    simulink_experiment_debug_typ_B.v_ref = 0.0;
+    simulink_experiment_debug_typ_B.a_ref = 0.0;
+  }
+
+  /* End of MATLAB Function: '<Root>/MATLAB Function' */
 
   /* Gain: '<Root>/m to cm' */
   /* '<S2>:1:3' */
@@ -701,6 +767,7 @@ void simulink_experiment_debug_type1_update(int_T tid)
 void simulink_experiment_debug_type1_initialize(void)
 {
   {
+    dsp_simulink_MovingAverage_si_T *b_obj_0;
     studentControllerInterface_si_T *b_obj;
 
     /* Start for S-Function (hil_initialize_block): '<S1>/HIL Initialize' */
@@ -952,73 +1019,79 @@ void simulink_experiment_debug_type1_initialize(void)
     }
 
     /* Start for MATLABSystem: '<Root>/MATLAB System' */
-    b_obj = &simulink_experiment_debug_ty_DW.obj;
-    b_obj->x_hat[0] = 0.0;
-    b_obj->x_hat[1] = 0.0;
-    b_obj->x_hat[2] = 0.0;
-    b_obj->x_hat[3] = 0.0;
-    b_obj->prev_u = 0.0;
-    simulink_experiment_debug_ty_DW.objisempty = true;
+    b_obj = &simulink_experiment_debug_ty_DW.obj_g;
+    b_obj->prev_p_ball = 0.0;
+    b_obj->prev_theta = 0.0;
+    b_obj->prev_p_ball_ref = 0.0;
+    b_obj->prev_t = -1.0;
+    simulink_experiment_debug_ty_DW.objisempty_g = true;
 
-    /*  coder.extrinsic("c2d", "lqr", "place"); */
+    /* Start for MATLABSystem: '<Root>/Moving Average' */
     /*   */
-    /*  % Define system parameters */
-    /*  g = 9.81;   % Gravity (m/s^2) */
-    /*  tau = 0.025; % Motor time constant (s) */
-    /*  K_motor = 1.5; % Motor gain (rad/sV) */
-    /*  rg = 0.0254; % Servo arm length (m) */
-    /*  L_beam = 0.4255; % Beam length (m) */
+    /*              coder.extrinsic("lqr"); */
     /*   */
-    /*  % Define system matrices (A, B, C) */
-    /*  Ac = [0 1 0 0; */
-    /*      0 0 5*g*rg/(7*L_beam) 0; */
-    /*      0 0 0 1; */
-    /*      0 0 0 -1/tau]; */
-    /*  Bc = [0; 0; 0; K_motor/tau]; */
-    /*  Cc = [1 0 0 0; */
-    /*       0 0 1 0]; */
-    /*  Q = diag([298, 6.87, 0, 0]); % Fill in your optimal Q matrix here */
-    /*  R = 0.406;    % Fill in your optimal R value here */
-    /*  dt = 0.01;  % Sampling time */
+    /*              % Define system parameters */
+    /*              g = 9.81;   % Gravity (m/s^2) */
+    /*              tau = 0.025; % Motor time constant (s) */
+    /*              K_motor = 1.5; % Motor gain (rad/sV) */
+    /*              rg = 0.0254; % Servo arm length (m) */
+    /*              L = 0.4255; % Beam length (m) */
     /*   */
-    /*  % Discretize A, B using zero-order hold */
-    /*  [Ad, Bd] = c2d(Ac, Bc, dt); */
+    /*              % Define updated A, B matrices with tau included */
+    /*              A = [0 1 0 0;  */
+    /*                   0 0 5*g*rg/(7*L) 0;  */
+    /*                   0 0 0 1;  */
+    /*                   0 0 0 -1/tau]; */
     /*   */
-    /*  % Save these */
-    /*  for i = 1:4 */
-    /*      for j = 1:4 */
-    /*          obj.A(i, j) = Ad(i, j); */
-    /*      end */
-    /*  end */
-    /*  for i = 1:4 */
-    /*      obj.B(i) = Bd(i); */
-    /*  end */
-    /*  obj.C = Cc; */
+    /*              B = [0; 0; 0; K_motor/tau]; */
     /*   */
-    /*  % LQR gain can still be computed in continuous-time */
-    /*  K_mx = lqr(Ac, Bc, Q, R); */
-    /*  for i = 1:4 */
-    /*      obj.K(i) = K_mx(i); */
-    /*  end */
+    /*              % Define LQR weight matrices */
+    /*              Q = diag([100, 0.3, 0, 0]); % Adjusted Q for smoother control */
+    /*              R = 0.2;  % Increased control effort penalty */
     /*   */
-    /*  % Observer design: place discrete poles (can multiply continuous poles' magnitudes) */
-    /*  manual_pole_radius = 0.3; */
-    /*  manual_poles = manual_pole_radius * [0.5, 0.5, 0.9, 0.9]; */
-    /*  L_mx = place(Ad', Cc', manual_poles)';  % Note the transpose */
-    /*  for i = 1:4 */
-    /*      for j = 1:2 */
-    /*          obj.L(i, j) = L_mx(i, j); */
-    /*      end */
-    /*  end */
-    /*   */
-    /*  % Initialize estimated state */
-    /*  obj.x_hat = zeros(4, 1); % [p_ball; v_ball; theta; dtheta] */
+    /*              % Compute LQR gain */
+    /*              K_mx = lqr(A, B, Q, R); */
+    /*              for i = 1:4 */
+    /*                  obj.K(i) = K_mx(i); */
+    /*              end */
+    simulink_experiment_debug_ty_DW.obj.matlabCodegenIsDeleted = true;
+    b_obj_0 = &simulink_experiment_debug_ty_DW.obj;
+    b_obj_0->isInitialized = 0;
+    b_obj_0->NumChannels = -1;
+    b_obj_0->FrameLength = -1;
+    b_obj_0->matlabCodegenIsDeleted = false;
+    simulink_experiment_debug_ty_DW.objisempty = true;
+    simulink_exper_SystemCore_setup(&simulink_experiment_debug_ty_DW.obj);
+  }
+
+  {
+    dsp_simulink_MovingAverage_si_T *obj;
+    g_dsp_internal_SlidingWindowA_T *obj_0;
+    int32_T i;
+
+    /* InitializeConditions for MATLABSystem: '<Root>/Moving Average' */
+    obj = &simulink_experiment_debug_ty_DW.obj;
+    obj_0 = obj->pStatistic;
+    if (obj_0->isInitialized == 1) {
+      obj_0->pCumSum = 0.0;
+      for (i = 0; i < 9; i++) {
+        obj_0->pCumSumRev[i] = 0.0;
+      }
+
+      obj_0->pCumRevIndex = 1.0;
+      obj_0->pModValueRev = 0.0;
+    }
+
+    /* End of InitializeConditions for MATLABSystem: '<Root>/Moving Average' */
   }
 }
 
 /* Model terminate function */
 void simulink_experiment_debug_type1_terminate(void)
 {
+  dsp_simulink_MovingAverage_si_T *obj;
+  g_dsp_internal_SlidingWindowA_T *obj_0;
+
   /* Terminate for S-Function (hil_initialize_block): '<S1>/HIL Initialize' */
 
   /* S-Function Block: simulink_experiment_debug_type1/Ball and Beam Hardware Interface/HIL Initialize (hil_initialize_block) */
@@ -1121,6 +1194,23 @@ void simulink_experiment_debug_type1_terminate(void)
     hil_close(simulink_experiment_debug_ty_DW.HILInitialize_Card);
     simulink_experiment_debug_ty_DW.HILInitialize_Card = NULL;
   }
+
+  /* Terminate for MATLABSystem: '<Root>/Moving Average' */
+  obj = &simulink_experiment_debug_ty_DW.obj;
+  if (!obj->matlabCodegenIsDeleted) {
+    obj->matlabCodegenIsDeleted = true;
+    if ((obj->isInitialized == 1) && obj->isSetupComplete) {
+      obj_0 = obj->pStatistic;
+      if (obj_0->isInitialized == 1) {
+        obj_0->isInitialized = 2;
+      }
+
+      obj->NumChannels = -1;
+      obj->FrameLength = -1;
+    }
+  }
+
+  /* End of Terminate for MATLABSystem: '<Root>/Moving Average' */
 }
 
 /*========================================================================*
@@ -1235,26 +1325,27 @@ RT_MODEL_simulink_experiment__T *simulink_experiment_debug_type1(void)
     simulink_experiment_debug_ty_M->Timing.sampleHits = (&mdlSampleHits[0]);
   }
 
-  rtmSetTFinal(simulink_experiment_debug_ty_M, 20.0);
+  rtmSetTFinal(simulink_experiment_debug_ty_M, 30.0);
   simulink_experiment_debug_ty_M->Timing.stepSize0 = 0.002;
   simulink_experiment_debug_ty_M->Timing.stepSize1 = 0.002;
   simulink_experiment_debug_ty_M->Timing.stepSize2 = 0.01;
 
   /* External mode info */
-  simulink_experiment_debug_ty_M->Sizes.checksums[0] = (447781608U);
-  simulink_experiment_debug_ty_M->Sizes.checksums[1] = (3776464842U);
-  simulink_experiment_debug_ty_M->Sizes.checksums[2] = (3835089707U);
-  simulink_experiment_debug_ty_M->Sizes.checksums[3] = (1452606427U);
+  simulink_experiment_debug_ty_M->Sizes.checksums[0] = (3237799284U);
+  simulink_experiment_debug_ty_M->Sizes.checksums[1] = (3100033505U);
+  simulink_experiment_debug_ty_M->Sizes.checksums[2] = (2293652575U);
+  simulink_experiment_debug_ty_M->Sizes.checksums[3] = (1645019287U);
 
   {
     static const sysRanDType rtAlwaysEnabled = SUBSYS_RAN_BC_ENABLE;
     static RTWExtModeInfo rt_ExtModeInfo;
-    static const sysRanDType *systemRan[3];
+    static const sysRanDType *systemRan[4];
     simulink_experiment_debug_ty_M->extModeInfo = (&rt_ExtModeInfo);
     rteiSetSubSystemActiveVectorAddresses(&rt_ExtModeInfo, systemRan);
     systemRan[0] = &rtAlwaysEnabled;
     systemRan[1] = &rtAlwaysEnabled;
     systemRan[2] = &rtAlwaysEnabled;
+    systemRan[3] = &rtAlwaysEnabled;
     rteiSetModelMappingInfoPtr(simulink_experiment_debug_ty_M->extModeInfo,
       &simulink_experiment_debug_ty_M->SpecialInfo.mappingInfo);
     rteiSetChecksumsPtr(simulink_experiment_debug_ty_M->extModeInfo,
@@ -1291,6 +1382,7 @@ RT_MODEL_simulink_experiment__T *simulink_experiment_debug_type1(void)
     simulink_experiment_debug_typ_B.RateTransition3 = 0.0;
     simulink_experiment_debug_typ_B.RateTransition4 = 0.0;
     simulink_experiment_debug_typ_B.RateTransition = 0.0;
+    simulink_experiment_debug_typ_B.MovingAverage = 0.0;
     simulink_experiment_debug_typ_B.MATLABSystem = 0.0;
     simulink_experiment_debug_typ_B.p_ref = 0.0;
     simulink_experiment_debug_typ_B.v_ref = 0.0;
@@ -1331,7 +1423,7 @@ RT_MODEL_simulink_experiment__T *simulink_experiment_debug_type1(void)
     (void) memset((char_T *) &dtInfo, 0,
                   sizeof(dtInfo));
     simulink_experiment_debug_ty_M->SpecialInfo.mappingInfo = (&dtInfo);
-    dtInfo.numDataTypes = 22;
+    dtInfo.numDataTypes = 23;
     dtInfo.dataTypeSizes = &rtDataTypeSizes[0];
     dtInfo.dataTypeNames = &rtDataTypeNames[0];
 
@@ -1348,9 +1440,9 @@ RT_MODEL_simulink_experiment__T *simulink_experiment_debug_type1(void)
   simulink_experiment_debug_ty_M->Sizes.numU = (0);/* Number of model inputs */
   simulink_experiment_debug_ty_M->Sizes.sysDirFeedThru = (0);/* The model is not direct feedthrough */
   simulink_experiment_debug_ty_M->Sizes.numSampTimes = (3);/* Number of sample times */
-  simulink_experiment_debug_ty_M->Sizes.numBlocks = (34);/* Number of blocks */
-  simulink_experiment_debug_ty_M->Sizes.numBlockIO = (19);/* Number of block outputs */
-  simulink_experiment_debug_ty_M->Sizes.numBlockPrms = (128);/* Sum of parameter "widths" */
+  simulink_experiment_debug_ty_M->Sizes.numBlocks = (32);/* Number of blocks */
+  simulink_experiment_debug_ty_M->Sizes.numBlockIO = (20);/* Number of block outputs */
+  simulink_experiment_debug_ty_M->Sizes.numBlockPrms = (92);/* Sum of parameter "widths" */
   return simulink_experiment_debug_ty_M;
 }
 

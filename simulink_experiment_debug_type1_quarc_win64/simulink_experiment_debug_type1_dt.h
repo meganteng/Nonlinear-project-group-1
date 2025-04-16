@@ -7,9 +7,9 @@
  *
  * Code generation for model "simulink_experiment_debug_type1".
  *
- * Model version              : 16.0
+ * Model version              : 16.5
  * Simulink Coder version : 9.8 (R2022b) 13-May-2022
- * C source code generated on : Wed Apr 16 13:01:58 2025
+ * C source code generated on : Wed Apr 16 13:58:36 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -40,6 +40,7 @@ static uint_T rtDataTypeSizes[] = {
   sizeof(t_card),
   sizeof(t_task),
   sizeof(studentControllerInterface_si_T),
+  sizeof(dsp_simulink_MovingAverage_si_T),
   sizeof(uint_T),
   sizeof(char_T),
   sizeof(uchar_T),
@@ -66,6 +67,7 @@ static const char_T * rtDataTypeNames[] = {
   "t_card",
   "t_task",
   "studentControllerInterface_si_T",
+  "dsp_simulink_MovingAverage_si_T",
   "uint_T",
   "char_T",
   "uchar_T",
@@ -75,10 +77,12 @@ static const char_T * rtDataTypeNames[] = {
 /* data type transitions for block I/O structure */
 static DataTypeTransition rtBTransitions[] = {
   { (char_T *)(&simulink_experiment_debug_typ_B.HILReadEncoderTimebase), 0, 0,
-    20 }
+    21 }
   ,
 
-  { (char_T *)(&simulink_experiment_debug_ty_DW.obj), 17, 0, 1 },
+  { (char_T *)(&simulink_experiment_debug_ty_DW.obj), 18, 0, 1 },
+
+  { (char_T *)(&simulink_experiment_debug_ty_DW.obj_g), 17, 0, 1 },
 
   { (char_T *)(&simulink_experiment_debug_ty_DW.HILInitialize_AIMinimums[0]), 0,
     0, 18 },
@@ -95,18 +99,18 @@ static DataTypeTransition rtBTransitions[] = {
     0, 16 },
 
   { (char_T *)(&simulink_experiment_debug_ty_DW.HILInitialize_DOBits[0]), 8, 0,
-    9 }
+    10 }
 };
 
 /* data type transition table for block I/O structure */
 static DataTypeTransitionTable rtBTransTable = {
-  8U,
+  9U,
   rtBTransitions
 };
 
 /* data type transitions for Parameters structure */
 static DataTypeTransition rtPTransitions[] = {
-  { (char_T *)(&simulink_experiment_debug_typ_P.Ad[0]), 0, 0, 40 },
+  { (char_T *)(&simulink_experiment_debug_typ_P.K_mx[0]), 0, 0, 4 },
 
   { (char_T *)(&simulink_experiment_debug_typ_P.HILReadAnalog_channels), 7, 0, 2
   },

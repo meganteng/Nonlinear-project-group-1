@@ -7,9 +7,9 @@
  *
  * Code generation for model "simulink_experiment_debug_type1".
  *
- * Model version              : 16.0
+ * Model version              : 16.5
  * Simulink Coder version : 9.8 (R2022b) 13-May-2022
- * C source code generated on : Wed Apr 16 13:01:58 2025
+ * C source code generated on : Wed Apr 16 13:58:36 2025
  *
  * Target selection: quarc_win64.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -22,36 +22,11 @@
 
 /* Block parameters (default storage) */
 P_simulink_experiment_debug_t_T simulink_experiment_debug_typ_P = {
-  /* Variable: Ad
-   * Referenced by: '<Root>/Constant'
-   */
-  { 1.0, 0.0, 0.0, 0.0, 0.001, 1.0, 0.0, 0.0, 2.0914386436125571E-7,
-    0.00041828772872251136, 1.0, 0.0, 6.9023015439205233E-11,
-    2.0638294374368747E-7, 0.00098026402119191975, 0.96078943915232318 },
-
-  /* Variable: Bd
-   * Referenced by: '<Root>/Constant1'
-   */
-  { 1.0374090218200024E-12, 4.1413809263523145E-9, 2.9603968212120359E-5,
-    0.058815841271515186 },
-
-  /* Variable: Cd
-   * Referenced by: '<Root>/Constant2'
-   */
-  { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0 },
-
   /* Variable: K_mx
    * Referenced by: '<Root>/Constant3'
    */
-  { 1.2206555615735604, 2.7071563468171496, 1.2497936772474756,
-    0.030545090037153593 },
-
-  /* Variable: L_mx
-   * Referenced by: '<Root>/Constant4'
-   */
-  { 1.5799999999997429, 620.49999999967258, -1.6467175872751347E-16,
-    -9.44693281046273E-14, 4.16920519527223E-7, 0.000698991170496955,
-    1.5407894391523214, 571.36115356110076 },
+  { 9.9999999999997247, 11.093472572403572, 2.5725769001359837,
+    0.061479615190427266 },
 
   /* Mask Parameter: HILReadAnalog_channels
    * Referenced by: '<S1>/HIL Read Analog'
