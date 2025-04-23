@@ -135,7 +135,7 @@ classdef studentControllerInterface < matlab.System
             u = (v - nonlinear_terms) * tau / (a * cos(theta_hat) * K_motor);
 
             % Apply physical constraints
-            theta_saturation = 45 * pi / 180; % Limit servo movement to ±45 degrees
+            theta_saturation = 56 * pi / 180;
             theta_d = asin(min(max(...
                 (7 * L_beam / (5 * g * rg)) * (v + (5/7) * ((L_beam/2) - p_ball_hat) * (rg/L_beam)^2 * dtheta_hat^2 * cos(theta_hat)^2), ...
                 -1), 1)); % Ensure valid range for asin

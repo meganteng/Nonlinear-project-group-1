@@ -3,40 +3,70 @@ classdef studentControllerInterface_LQR_2 < matlab.System
 
     properties (Access = private)
         K = zeros(1, 4);  % LQR gain matrix
+        L = zeros(4, 2);  % Luenberger Observer Gains
         t_prev = -1;
         theta_d = 0;
         prev_p_ball = 0;
         prev_theta = 0;
         prev_p_ball_ref = 0;
         prev_t = -1;
+        x_hat = zeros(4, 1);
+        prev_u = 0;
+
+        A = zeros(4, 4);
+        B = zeros(4, 1);
+        C = zeros(2, 4);
     end
 
     methods(Access = protected)
         function setupImpl(obj)
-            coder.extrinsic("lqr");
-
-            % System constants
-            g = 9.81;
-            tau = 0.025;
-            K_motor = 1.5;
-            rg = 0.0254;
-            L = 0.4255;
-
-            % Linearized system matrices
-            A = [0 1 0 0;
-                 0 0 5*g*rg/(7*L) 0;
-                 0 0 0 1;
-                 0 0 0 -1/tau];
-            B = [0; 0; 0; K_motor/tau];
-
-            % Cost weights
-            Q = diag([100, 1, 10, 1]);
-            R = 200;
-
-            obj.K = lqr(A, B, Q, R);
+%             coder.extrinsic("lqr");
+% 
+%             % System constants
+%             g = 9.81;
+%             tau = 0.025;
+%             K_motor = 1.5;
+%             rg = 0.0254;
+%             L = 0.4255;
+% 
+%             % Linearized system matrices
+%             A = [0 1 0 0;
+%                  0 0 5*g*rg/(7*L) 0;
+%                  0 0 0 1;
+%                  0 0 0 -1/tau];
+%             B = [0; 0; 0; K_motor/tau];
+% 
+%             % Cost weights
+%             Q = diag([100, 1, 10, 1]);
+%             R = 200;
+% 
+%             obj.K = zeros(1, 4);
+%             obj.K = lqr(A, B, Q, R);
         end
 
-        function V_servo = stepImpl(obj, t, p_ball, theta)
+        function V_servo = stepImpl(obj, t, p_ball, theta, Ad, Bd, Cd, K_mx, L_mx)
+            for i = 1:4
+                obj.K(i) = K_mx(i);
+            end
+            for i = 1:4
+                for j = 1:2
+                    obj.L(i, j) = L_mx(i, j);
+                end
+            end
+            for i = 1:4
+                for j = 1:4
+                    obj.A(i, j) = Ad(i, j);
+                end
+            end
+            for i = 1:4
+                obj.B(i) = Bd(i);
+            end
+            for i = 1:2
+                for j = 1:4
+                    obj.C(i, j) = Cd(i, j);
+                end
+            end
+
             % Parameters
             g = 9.81;
             tau = 0.025;
@@ -49,16 +79,22 @@ classdef studentControllerInterface_LQR_2 < matlab.System
 
             % Time delta
             if obj.prev_t < 0
-                dt = 1e-3;
+                dt = 0.01;
             else
-                dt = max(t - obj.prev_t, 1e-3);
+                dt = max(t - obj.prev_t, 0.01);
             end
+            y = [p_ball; theta];
+            obj.x_hat = obj.x_hat + (obj.A * obj.x_hat + obj.B * obj.prev_u + obj.L * (y - obj.C * obj.x_hat)) * dt;
 
             % Finite difference estimation
-            v_ball = (p_ball - obj.prev_p_ball) / dt;
-            v_theta = (theta - obj.prev_theta) / dt;
+            % v_ball = (p_ball - obj.prev_p_ball) / dt;
+            % v_theta = (theta - obj.prev_theta) / dt;
 
             % State vector relative to reference
+            % p_ball = obj.x_hat(1);
+            v_ball = obj.x_hat(2);
+            % theta = obj.x_hat(3);
+            v_theta = obj.x_hat(4);
             x = [p_ball - p_ball_ref; v_ball - v_ball_ref; theta; v_theta];
 
             % LQR virtual control (desired third derivative of z)
@@ -100,6 +136,7 @@ classdef studentControllerInterface_LQR_2 < matlab.System
             obj.prev_theta = theta;
             obj.prev_p_ball_ref = p_ball_ref;
             obj.prev_t = t;
+            obj.prev_u = u;
         end
     end
 
