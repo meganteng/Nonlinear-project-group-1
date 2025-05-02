@@ -25,14 +25,14 @@ Below are links to detailed plots and videos from our simulations and hardware e
 
 - [PID Controller Plots & Simulation Video](docs/PID-controller-plots.md)
 - [Feedback Linearization + LQR Controller Plots & Simulation Video](docs/FL-LQR-controller-plots.md)
-- [Experimental Hardware Video Clips](docs/experimental-hardware-clips.md)
+- Experimental Hardware Video Clips are located in the `docs/Videos-(hardware)/` directory.
 
 ### PID Controller Hardware vs Simulation
 
 Here's a comparison showing the PID controller running on the hardware versus in simulation:
 
 **Hardware Experiment:**
-<video controls src="docs/Videos-(hardware)/PXL_20250430_201119682.mp4" title="PID Hardware Experiment" width="400"></video>
+[![PID Hardware Experiment](docs/thumbnail-video-experiment-hardware-pid-controller.png)](https://raw.githubusercontent.com/meganteng/Nonlinear-project-group-1/main/docs/Videos-(hardware)/PXL_20250430_201119682.mp4)
 
 **Simulation:**
-<video controls src="docs/PID-Controller-Plots/PID-simulator-tracking.mp4" title="PID Simulator Tracking" width="400"></video>
+[![PID Simulator Tracking](docs/thumbnail-video-simulation-pid-controller.png)](https://raw.githubusercontent.com/meganteng/Nonlinear-project-group-1/main/docs/PID-Controller-Plots/PID-simulator-tracking.mp4)
