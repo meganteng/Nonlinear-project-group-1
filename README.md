@@ -6,15 +6,15 @@
 
 ## Project Summary
 
-This project focused on designing, simulating, and testing nonlinear controllers for a physical ball and beam system. The primary objective was to stabilize the ball's position along the beam, tracking various reference trajectories.
+This project focused on designing, simulating, and testing controllers for a nonlinear physical ball and beam system. The primary objective was to stabilize the ball's position along the beam, tracking various reference trajectories.
 
 We implemented and compared two main control strategies:
 1.  A standard **PID Controller**.
-2.  A **Feedback Linearization (FL) controller combined with LQR** state feedback, utilizing a **Luenberger observer** for state estimation.
+2.  A **Feedback Linearization (FL) controller combined with LQR**.
 
 Both controllers were tested in simulation and on hardware, tracking sine wave, square wave, and customized reference trajectories.
 
-While the PID controller demonstrated effective and stable performance in both simulation and hardware experiments, the FL+LQR controller encountered unexpected difficulties. Despite implementing a Luenberger observer to estimate the system states, the resulting control input (`u`) exhibited significant noise, particularly on the hardware, hindering its practical performance.
+While the PID controller demonstrated effective and stable performance in both simulation and hardware experiments, the FL+LQR controller encountered unexpected difficulties. Despite attempts at implementing a Luenberger observer to estimate the system states as well as other approaches, the resulting control input (`u`) exhibited significant noise, hindering its performance considerably.
 
 See [Setup Instructions](docs/SETUP.md) for details on running the code.
 
