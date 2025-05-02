@@ -32,7 +32,11 @@ Below are links to detailed plots and videos from our simulations and hardware e
 Here's a comparison showing the PID controller running on the hardware versus in simulation:
 
 **Hardware Experiment:**
-[![PID Hardware Experiment](docs/thumbnail-video-experiment-hardware-pid-controller.png)](https://raw.githubusercontent.com/meganteng/Nonlinear-project-group-1/main/docs/Videos-(hardware)/PXL_20250430_201119682.mp4)
+<a href="https://github.com/meganteng/Nonlinear-project-group-1/blob/main/docs/Videos-(hardware)/PXL_20250430_201119682.mp4">
+  <img src="docs/thumbnail-video-experiment-hardware-pid-controller.png" alt="PID Hardware Experiment" width="400"/>
+</a>
 
 **Simulation:**
-[![PID Simulator Tracking](docs/thumbnail-video-simulation-pid-controller.png)](https://raw.githubusercontent.com/meganteng/Nonlinear-project-group-1/main/docs/PID-Controller-Plots/PID-simulator-tracking.mp4)
+<a href="https://github.com/meganteng/Nonlinear-project-group-1/blob/main/docs/PID-Controller-Plots/PID-simulator-tracking.mp4">
+  <img src="docs/thumbnail-video-simulation-pid-controller.png" alt="PID Simulator Tracking" width="400"/>
+</a>
