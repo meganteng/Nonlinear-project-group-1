@@ -4,6 +4,8 @@
 
 *Group 1: Megan Teng, Boyuan Liang, Sveinung Myhre*
 
+View the report [here](Nonlinear_Control_of_Ball_and_Beam_System.pdf) or download it as a pdf directly [here](https://github.com/meganteng/Nonlinear-project-group-1/raw/main/Nonlinear_Control_of_Ball_and_Beam_System.pdf).
+
 ## Project Summary
 
 This project focused on designing, simulating, and testing controllers for a nonlinear physical ball and beam system. The primary objective was to stabilize the ball's position along the beam, tracking various reference trajectories.
@@ -18,7 +20,6 @@ While the PID controller demonstrated effective and stable performance in both s
 
 See [Setup Instructions](docs/SETUP.md) for details on running the code.
 
----
 
 ## Results
 
