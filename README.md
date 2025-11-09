@@ -4,7 +4,7 @@
 
 *Group 1: Megan Teng, Boyuan Liang, Sveinung Myhre*
 
-View the report [here](Nonlinear_Control_of_Ball_and_Beam_System.pdf) or download it as a pdf directly [here](https://github.com/meganteng/Nonlinear-project-group-1/raw/main/Nonlinear_Control_of_Ball_and_Beam_System.pdf).
+View the report [here](Nonlinear_Control_of_Ball_and_Beam_System.pdf) or download it as a pdf directly [here](https://github.com/meganteng/Nonlinear-project-group-1/raw/master/Nonlinear_Control_of_Ball_and_Beam_System.pdf).
 
 ## Project Summary
 
